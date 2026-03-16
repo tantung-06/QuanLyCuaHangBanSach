@@ -54,4 +54,8 @@ public class TaiKhoanBUS {
         if (maTaiKhoan == null || maTaiKhoan.trim().isEmpty()) return false;
         return taiKhoanDAO.delete(maTaiKhoan);
     }
+    
+    public String generateMaTaiKhoan() {
+        return taiKhoanDAO.generateMaTaiKhoan();
+    }
 }

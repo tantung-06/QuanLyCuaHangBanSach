@@ -1,3 +1,7 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
 package dao;
 
 import config.DatabaseConnection;
@@ -190,6 +194,21 @@ public class PhieuXuatDAO {
             e.printStackTrace();
         }
         return false;
+    }
+    
+    public String generateMaPhieuXuat() {
+        String sql = "SELECT maPhieuXuat FROM PhieuXuat ORDER BY maPhieuXuat DESC LIMIT 1";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+            if (rs.next()) {
+                int num = Integer.parseInt(rs.getString("maPhieuXuat").replaceAll("[^0-9]", ""));
+                return String.format("PX%03d", num + 1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return "PX001";
     }
     
     // Doanh thu theo ngày trong tháng/năm chỉ định

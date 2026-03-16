@@ -3,30 +3,16 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/QuanLyCuaHangBanSach/src/gui/panel/NhomQuyenPanel.java</file>
-            <file>file:/C:/QuanLyCuaHangBanSach/src/gui/dialog/NhomQuyenDialog.java</file>
-            <file>file:/C:/QuanLyCuaHangBanSach/src/gui/MainFrame.java</file>
-            <file>file:/C:/QuanLyCuaHangBanSach/src/dto/KhuyenMai.java</file>
-            <file>file:/C:/QuanLyCuaHangBanSach/src/gui/panel/SachPanel.java</file>
-            <file>file:/C:/QuanLyCuaHangBanSach/src/gui/dialog/KhuyenMaiDialog.java</file>
-            <file>file:/C:/QuanLyCuaHangBanSach/src/gui/panel/KhuyenMaiPanel.java</file>
-            <file>file:/C:/QuanLyCuaHangBanSach/src/dao/KhuyenMaiDAO.java</file>
-            <file>file:/C:/QuanLyCuaHangBanSach/src/bus/NhanVienBUS.java</file>
-            <file>file:/C:/QuanLyCuaHangBanSach/src/dao/NhanVienDAO.java</file>
-            <file>file:/C:/QuanLyCuaHangBanSach/src/bus/KhuyenMaiBUS.java</file>
-            <file>file:/C:/QuanLyCuaHangBanSach/src/dto/TaiKhoan.java</file>
-            <file>file:/C:/QuanLyCuaHangBanSach/src/dao/TaiKhoanDAO.java</file>
-            <file>file:/C:/QuanLyCuaHangBanSach/src/gui/panel/TaiKhoanPanel.java</file>
+            <file>file:/C:/QuanLyCuaHangBanSach/src/gui/dialog/PhieuXuatDialog.java</file>
+            <file>file:/C:/QuanLyCuaHangBanSach/src/gui/dialog/PhieuNhapDialog.java</file>
+            <file>file:/C:/QuanLyCuaHangBanSach/src/gui/dialog/SachDialog.java</file>
+            <file>file:/C:/QuanLyCuaHangBanSach/src/gui/dialog/KhachHangDialog.java</file>
+            <file>file:/C:/QuanLyCuaHangBanSach/src/gui/dialog/NhanVienDialog.java</file>
             <file>file:/C:/QuanLyCuaHangBanSach/src/gui/dialog/TaiKhoanDialog.java</file>
-            <file>file:/C:/QuanLyCuaHangBanSach/src/bus/TaiKhoanBUS.java</file>
-            <file>file:/C:/QuanLyCuaHangBanSach/src/gui/panel/ThongKePanel.java</file>
-            <file>file:/C:/QuanLyCuaHangBanSach/src/dao/PhieuXuatDAO.java</file>
-            <file>file:/C:/QuanLyCuaHangBanSach/src/gui/Login.java</file>
-            <file>file:/C:/QuanLyCuaHangBanSach/src/gui/panel/TrangChuPanel.java</file>
-            <file>file:/C:/QuanLyCuaHangBanSach/src/gui/panel/PhieuXuatPanel.java</file>
+            <file>file:/C:/QuanLyCuaHangBanSach/src/gui/dialog/NhomQuyenDialog.java</file>
+            <file>file:/C:/QuanLyCuaHangBanSach/src/gui/dialog/KhuyenMaiDialog.java</file>
             <file>file:/C:/QuanLyCuaHangBanSach/src/gui/panel/PhieuNhapPanel.java</file>
-            <file>file:/C:/QuanLyCuaHangBanSach/src/gui/panel/NhanVienPanel.java</file>
-            <file>file:/C:/QuanLyCuaHangBanSach/src/gui/panel/KhachHangPanel.java</file>
+            <file>file:/C:/QuanLyCuaHangBanSach/src/gui/panel/PhieuXuatPanel.java</file>
         </group>
     </open-files>
 </project-private>

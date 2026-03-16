@@ -56,6 +56,12 @@ public class PhieuXuatDialog extends JDialog {
         setLocationRelativeTo(parent);
         setResizable(false);
         init();
+        if (px != null) {
+            populateFields(px);
+        } else {
+            txtMaPX.setText(pxBUS.generateMaPhieuXuat());
+            txtMaPX.setEditable(false);
+        }
         if (px != null) populateFields(px);
     }
 
@@ -88,14 +94,14 @@ public class PhieuXuatDialog extends JDialog {
 
     private JPanel buildHeader() {
         JPanel wrap = new JPanel(new BorderLayout());
-        wrap.setBackground(new Color(240, 248, 255));
+        wrap.setBackground(Color.WHITE);
         wrap.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createMatteBorder(0, 0, 1, 0, new Color(200, 200, 200)),
                 BorderFactory.createEmptyBorder(12, 16, 8, 16)));
 
         // Row 1: mã, ngày, KH, NV
         JPanel row1 = new JPanel(new GridLayout(2, 4, 10, 6));
-        row1.setBackground(new Color(240, 248, 255));
+        row1.setBackground(Color.WHITE);
 
         row1.add(lbl("Mã phiếu xuất *"));
         row1.add(lbl("Ngày lập *"));
@@ -121,7 +127,7 @@ public class PhieuXuatDialog extends JDialog {
 
         // Row 2: khuyến mãi, trạng thái
         JPanel row2 = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 4));
-        row2.setBackground(new Color(240, 248, 255));
+        row2.setBackground(Color.WHITE);
 
         row2.add(lbl("Khuyến mãi:"));
         cboKhuyenMai = new JComboBox<>();
@@ -135,7 +141,7 @@ public class PhieuXuatDialog extends JDialog {
 
         row2.add(Box.createHorizontalStrut(20));
         row2.add(lbl("Trạng thái:"));
-        cboTrangThai = new JComboBox<>(new String[]{"CHO_XU_LY", "DA_XU_LY", "HUY"});
+        cboTrangThai = new JComboBox<>(new String[]{"DA_XUAT", "HUY"});
         row2.add(cboTrangThai);
 
         wrap.add(row1, BorderLayout.NORTH);
@@ -155,7 +161,7 @@ public class PhieuXuatDialog extends JDialog {
         inputRow.setBackground(Color.WHITE);
 
         cboSach = new JComboBox<>();
-        sachBUS.getByTrangThai("DANG_BAN").forEach(s ->
+        sachBUS.getByTrangThai("CON_HANG").forEach(s ->
             cboSach.addItem(s.getMaSach() + " - " + s.getTenSach()
                 + " (Tồn: " + s.getSoLuongTon() + ")"));
         cboSach.setPreferredSize(new Dimension(280, 30));
@@ -191,7 +197,7 @@ public class PhieuXuatDialog extends JDialog {
         tblChiTiet.setRowHeight(28);
         tblChiTiet.setFont(new Font("Segoe UI", Font.PLAIN, 13));
         tblChiTiet.getTableHeader().setFont(new Font("Segoe UI", Font.BOLD, 13));
-        tblChiTiet.getTableHeader().setBackground(new Color(232, 245, 255));
+        tblChiTiet.getTableHeader().setBackground(new Color(234, 234, 234));
         tblChiTiet.getColumnModel().getColumn(5).setMaxWidth(60);
 
         tblChiTiet.getColumnModel().getColumn(5).setCellRenderer(
@@ -224,7 +230,7 @@ public class PhieuXuatDialog extends JDialog {
 
     private JPanel buildFooter() {
         JPanel p = new JPanel(new BorderLayout());
-        p.setBackground(new Color(240, 248, 255));
+        p.setBackground(Color.WHITE);
         p.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createMatteBorder(1, 0, 0, 0, new Color(200, 200, 200)),
                 BorderFactory.createEmptyBorder(10, 16, 10, 16)));
@@ -234,16 +240,16 @@ public class PhieuXuatDialog extends JDialog {
         lblTongTien.setForeground(new Color(220, 53, 69));
 
         JPanel btnPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 0));
-        btnPanel.setBackground(new Color(240, 248, 255));
+        btnPanel.setBackground(Color.WHITE);
 
-        btnHuy = new JButton("✕  Hủy");
+        btnHuy = new JButton("Hủy");
         btnHuy.setPreferredSize(new Dimension(110, 36));
         btnHuy.setBackground(new Color(108, 117, 125));
         btnHuy.setForeground(Color.WHITE);
         btnHuy.setFont(new Font("Segoe UI", Font.BOLD, 13));
         btnHuy.setFocusPainted(false);
 
-        btnLuu = new JButton("💾  Lưu");
+        btnLuu = new JButton("Lưu");
         btnLuu.setPreferredSize(new Dimension(110, 36));
         btnLuu.setBackground(new Color(40, 167, 69));
         btnLuu.setForeground(Color.WHITE);

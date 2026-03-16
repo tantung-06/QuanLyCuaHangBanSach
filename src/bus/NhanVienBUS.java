@@ -63,4 +63,8 @@ public class NhanVienBUS {
         if (maNhanVien == null || maNhanVien.trim().isEmpty()) return false;
         return nhanVienDAO.delete(maNhanVien);
     }
+    
+    public String generateMaNhanVien() {
+        return nhanVienDAO.generateMaNhanVien();
+    }
 }

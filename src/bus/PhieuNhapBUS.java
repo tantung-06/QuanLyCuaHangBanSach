@@ -106,6 +106,10 @@ public class PhieuNhapBUS {
             throw new Exception("Thông tin không hợp lệ");
         return chiTietDAO.delete(maPhieuNhap, maSach);
     }
+    
+    public String generateMaPhieuNhap() {
+        return phieuNhapDAO.generateMaPhieuNhap();
+    }
 
     //validate
     private void validatePhieuNhap(PhieuNhap pn) throws Exception {

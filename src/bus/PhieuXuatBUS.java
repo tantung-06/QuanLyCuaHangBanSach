@@ -120,4 +120,8 @@ public class PhieuXuatBUS {
         if (px.getTongTien() < 0)
             throw new Exception("Tổng tiền không hợp lệ");
     }
+    
+    public String generateMaPhieuXuat() {
+        return phieuXuatDAO.generateMaPhieuXuat();
+    }
 }

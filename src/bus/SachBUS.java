@@ -72,4 +72,8 @@ public class SachBUS {
         if (maSach == null || maSach.trim().isEmpty()) return false;
         return sachDAO.delete(maSach);
     }
+    
+    public String generateMaSach() {
+        return sachDAO.generateMaSach();
+    }
 }

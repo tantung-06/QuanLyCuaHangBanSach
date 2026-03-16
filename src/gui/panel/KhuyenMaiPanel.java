@@ -27,7 +27,7 @@ public class KhuyenMaiPanel extends JPanel {
 
     private JButton btnThem, btnXoa, btnSua, btnChiTiet;
 
-    private static final Color BG = new Color(240, 247, 250);
+    private static final Color BG = new Color(235, 252, 255);
     private static final NumberFormat FMT = NumberFormat.getNumberInstance(new Locale("vi", "VN"));
 
     public KhuyenMaiPanel() {
@@ -151,7 +151,7 @@ public class KhuyenMaiPanel extends JPanel {
         } catch (Exception ignored) {}
 
         JLabel lblText = new JLabel(text, SwingConstants.CENTER);
-        lblText.setFont(new Font("Segoe UI", Font.BOLD, 12));
+        lblText.setFont(new Font("Segoe UI", Font.BOLD, 18));
         lblText.setForeground(new Color(50, 50, 50));
 
         JPanel wrap = new JPanel();
@@ -182,7 +182,7 @@ public class KhuyenMaiPanel extends JPanel {
 
         table = new JTable(tableModel);
         table.setRowHeight(32);
-        table.setFont(new Font("Segoe UI", Font.PLAIN, 13));
+        table.setFont(new Font("Segoe UI", Font.PLAIN, 14));
         table.setShowHorizontalLines(true);
         table.setGridColor(new Color(230, 235, 240));
         table.setSelectionBackground(new Color(210, 235, 255));
@@ -192,8 +192,8 @@ public class KhuyenMaiPanel extends JPanel {
         table.setFocusable(false);
 
         JTableHeader header = table.getTableHeader();
-        header.setFont(new Font("Segoe UI", Font.BOLD, 13));
-        header.setBackground(new Color(232, 245, 255));
+        header.setFont(new Font("Segoe UI", Font.BOLD, 14));
+        header.setBackground(new Color(234, 234, 234));
         header.setForeground(new Color(50, 50, 50));
         header.setPreferredSize(new Dimension(0, 36));
 
@@ -225,6 +225,8 @@ public class KhuyenMaiPanel extends JPanel {
 
         JScrollPane scroll = new JScrollPane(table);
         scroll.setBorder(BorderFactory.createEmptyBorder());
+        scroll.getViewport().setBackground(Color.WHITE);
+        table.setFillsViewportHeight(true);
         panel.add(scroll, BorderLayout.CENTER);
         return panel;
     }

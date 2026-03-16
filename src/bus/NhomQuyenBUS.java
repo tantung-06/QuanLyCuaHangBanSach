@@ -38,4 +38,8 @@ public class NhomQuyenBUS {
         if (maNhomQuyen == null || maNhomQuyen.trim().isEmpty()) return false;
         return nhomQuyenDAO.delete(maNhomQuyen);
     }
+    
+    public String generateMaNhomQuyen() {
+        return nhomQuyenDAO.generateMaNhomQuyen();
+    }
 }

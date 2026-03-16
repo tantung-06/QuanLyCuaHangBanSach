@@ -26,6 +26,12 @@ public class NhanVienDialog extends JDialog {
         setLocationRelativeTo(parent);
         setResizable(false);
         init();
+        if (nv != null) {
+            populateFields(nv);
+        } else {
+            txtMa.setText(nvBUS.generateMaNhanVien());
+            txtMa.setEditable(false);
+        }
         if (nv != null) populateFields(nv);
     }
 
@@ -49,11 +55,9 @@ public class NhanVienDialog extends JDialog {
         add(buildFooter(), BorderLayout.SOUTH);
     }
 
-    // ==================== FORM ====================
-
     private JPanel buildForm() {
         JPanel p = new JPanel(new GridBagLayout());
-        p.setBackground(new Color(240, 248, 255));
+        p.setBackground(Color.WHITE);
         p.setBorder(BorderFactory.createEmptyBorder(16, 20, 8, 20));
 
         GridBagConstraints gbc = new GridBagConstraints();
@@ -67,7 +71,7 @@ public class NhanVienDialog extends JDialog {
         txtDiaChi     = new JTextField();
         txtEmail      = new JTextField();
         txtMaTaiKhoan = new JTextField();
-        cboTrangThai  = new JComboBox<>(new String[]{"HOAT_DONG", "NGUNG_HOAT_DONG"});
+        cboTrangThai  = new JComboBox<>(new String[]{"HOAT_DONG", "NGUNG"});
 
         Object[][] rows = {
             {"Mã nhân viên *", txtMa},
@@ -100,21 +104,19 @@ public class NhanVienDialog extends JDialog {
         return p;
     }
 
-    // ==================== FOOTER ====================
-
     private JPanel buildFooter() {
         JPanel p = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 10));
-        p.setBackground(new Color(240, 248, 255));
+        p.setBackground(Color.WHITE);
         p.setBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, new Color(200, 200, 200)));
 
-        btnHuy = new JButton("✕  Hủy");
+        btnHuy = new JButton("Hủy");
         btnHuy.setPreferredSize(new Dimension(110, 34));
         btnHuy.setBackground(new Color(108, 117, 125));
         btnHuy.setForeground(Color.WHITE);
         btnHuy.setFont(new Font("Segoe UI", Font.BOLD, 13));
         btnHuy.setFocusPainted(false);
 
-        btnLuu = new JButton("💾  Lưu");
+        btnLuu = new JButton("Lưu");
         btnLuu.setPreferredSize(new Dimension(110, 34));
         btnLuu.setBackground(new Color(40, 167, 69));
         btnLuu.setForeground(Color.WHITE);
@@ -128,8 +130,6 @@ public class NhanVienDialog extends JDialog {
         btnLuu.addActionListener(e -> handleLuu());
         return p;
     }
-
-    // ==================== ACTIONS ====================
 
     private void handleLuu() {
         lblError.setText("");

@@ -158,4 +158,19 @@ public class TaiKhoanDAO {
         }
         return false;
     }
+    
+    public String generateMaTaiKhoan() {
+        String sql = "SELECT maTaiKhoan FROM TaiKhoan ORDER BY maTaiKhoan DESC LIMIT 1";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+            if (rs.next()) {
+                int num = Integer.parseInt(rs.getString("maTaiKhoan").replaceAll("[^0-9]", ""));
+                return String.format("TK%03d", num + 1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return "TK001";
+    }
 }

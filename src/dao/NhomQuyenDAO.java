@@ -87,4 +87,19 @@ public class NhomQuyenDAO {
         }
         return false;
     }
+    
+    public String generateMaNhomQuyen() {
+        String sql = "SELECT maNhomQuyen FROM NhomQuyen ORDER BY maNhomQuyen DESC LIMIT 1";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+            if (rs.next()) {
+                int num = Integer.parseInt(rs.getString("maNhomQuyen").replaceAll("[^0-9]", ""));
+                return String.format("NQ%03d", num + 1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return "NQ001";
+    }
 }

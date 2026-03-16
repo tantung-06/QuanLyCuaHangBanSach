@@ -247,4 +247,20 @@ public class SachDAO {
         }
         return false;
     }
+    
+    public String generateMaSach() {
+        String sql = "SELECT maSach FROM Sach ORDER BY maSach DESC LIMIT 1";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+            if (rs.next()) {
+                String last = rs.getString("maSach"); // VD: "S007"
+                int num = Integer.parseInt(last.replaceAll("[^0-9]", ""));
+                return String.format("S%03d", num + 1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return "S001";
+    }
 }

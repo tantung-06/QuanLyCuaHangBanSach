@@ -58,4 +58,8 @@ public class KhachHangBUS {
         if (maKhachHang == null || maKhachHang.trim().isEmpty()) return false;
         return khachHangDAO.delete(maKhachHang);
     }
+    
+    public String generateMaKhachHang() {
+        return khachHangDAO.generateMaKhachHang();
+    }
 }

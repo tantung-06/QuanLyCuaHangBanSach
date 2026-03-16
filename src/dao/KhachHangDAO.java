@@ -173,4 +173,19 @@ public class KhachHangDAO {
         }
         return false;
     }
+    
+    public String generateMaKhachHang() {
+        String sql = "SELECT maKhachHang FROM KhachHang ORDER BY maKhachHang DESC LIMIT 1";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+            if (rs.next()) {
+                int num = Integer.parseInt(rs.getString("maKhachHang").replaceAll("[^0-9]", ""));
+                return String.format("KH%03d", num + 1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return "KH001";
+    }
 }

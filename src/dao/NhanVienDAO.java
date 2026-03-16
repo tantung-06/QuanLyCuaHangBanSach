@@ -201,4 +201,19 @@ public class NhanVienDAO {
         }
         return false;
     }
+    
+    public String generateMaNhanVien() {
+        String sql = "SELECT maNhanVien FROM NhanVien ORDER BY maNhanVien DESC LIMIT 1";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+            if (rs.next()) {
+                int num = Integer.parseInt(rs.getString("maNhanVien").replaceAll("[^0-9]", ""));
+                return String.format("NV%03d", num + 1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return "NV001";
+    }
 }

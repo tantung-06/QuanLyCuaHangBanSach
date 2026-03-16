@@ -166,4 +166,19 @@ public class KhuyenMaiDAO {
         }
         return false;
     }
+    
+    public String generateMaKhuyenMai() {
+        String sql = "SELECT maKhuyenMai FROM KhuyenMai ORDER BY maKhuyenMai DESC LIMIT 1";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+            if (rs.next()) {
+                int num = Integer.parseInt(rs.getString("maKhuyenMai").replaceAll("[^0-9]", ""));
+                return String.format("KM%03d", num + 1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return "KM001";
+    }
 }

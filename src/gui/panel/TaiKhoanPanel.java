@@ -25,7 +25,7 @@ public class TaiKhoanPanel extends JPanel {
 
     private JButton btnThem, btnXoa, btnSua, btnChiTiet;
 
-    private static final Color BG = new Color(240, 247, 250);
+    private static final Color BG = new Color(235, 252, 255);
 
     public TaiKhoanPanel() {
         setLayout(new BorderLayout(0, 0));
@@ -88,7 +88,7 @@ public class TaiKhoanPanel extends JPanel {
         JPanel searchRow = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 0));
         searchRow.setBackground(Color.WHITE);
 
-        cboFilter = new JComboBox<>(new String[]{"Tất cả", "HOAT_DONG", "KHOA"});
+        cboFilter = new JComboBox<>(new String[]{"Tất cả", "HOAT_DONG", "NGUNG"});
         cboFilter.setPreferredSize(new Dimension(130, 34));
         cboFilter.addActionListener(e -> loadData());
 
@@ -148,8 +148,8 @@ public class TaiKhoanPanel extends JPanel {
         } catch (Exception ignored) {}
 
         JLabel lblText = new JLabel(text, SwingConstants.CENTER);
-        lblText.setFont(new Font("Segoe UI", Font.BOLD, 12));
-        lblText.setForeground(new Color(50, 50, 50));
+        lblText.setFont(new Font("Segoe UI", Font.BOLD, 18));
+        lblText.setForeground(Color.BLACK);
 
         JPanel wrap = new JPanel();
         wrap.setLayout(new BoxLayout(wrap, BoxLayout.Y_AXIS));
@@ -178,7 +178,7 @@ public class TaiKhoanPanel extends JPanel {
 
         table = new JTable(tableModel);
         table.setRowHeight(32);
-        table.setFont(new Font("Segoe UI", Font.PLAIN, 13));
+        table.setFont(new Font("Segoe UI", Font.PLAIN, 14));
         table.setShowHorizontalLines(true);
         table.setGridColor(new Color(230, 235, 240));
         table.setSelectionBackground(new Color(210, 235, 255));
@@ -188,9 +188,9 @@ public class TaiKhoanPanel extends JPanel {
         table.setFocusable(false);
 
         JTableHeader header = table.getTableHeader();
-        header.setFont(new Font("Segoe UI", Font.BOLD, 13));
-        header.setBackground(new Color(232, 245, 255));
-        header.setForeground(new Color(50, 50, 50));
+        header.setFont(new Font("Segoe UI", Font.BOLD, 14));
+        header.setBackground(new Color(234, 234, 234));
+        header.setForeground(Color.BLACK);
         header.setPreferredSize(new Dimension(0, 36));
 
         table.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
@@ -220,6 +220,8 @@ public class TaiKhoanPanel extends JPanel {
 
         JScrollPane scroll = new JScrollPane(table);
         scroll.setBorder(BorderFactory.createEmptyBorder());
+        scroll.getViewport().setBackground(Color.WHITE);
+        table.setFillsViewportHeight(true);
         panel.add(scroll, BorderLayout.CENTER);
         return panel;
     }

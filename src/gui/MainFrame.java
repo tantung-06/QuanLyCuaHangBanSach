@@ -20,11 +20,11 @@ public class MainFrame extends JFrame {
     private CardLayout cardLayout;
 
     private JLabel lblUserName;
-//    private JLabel lblUserRole;
+    private JLabel lblUserRole;
 
     public MainFrame() {
         setTitle("Hệ thống quản lý cửa hàng bán sách");
-        setSize(1024, 600);
+        setSize(1920, 1080);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setResizable(true);
@@ -52,49 +52,49 @@ public class MainFrame extends JFrame {
 
     private JPanel buildSidebar() {
         sidebar = new JPanel();
-        sidebar.setPreferredSize(new Dimension(170, 600));
+        sidebar.setPreferredSize(new Dimension(240, 1080));
         sidebar.setBackground(Color.WHITE);
         sidebar.setLayout(new BorderLayout());
 
-        // User info
+        // ---- User info ----
         JPanel userPanel = new JPanel();
         userPanel.setBackground(Color.WHITE);
         userPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 10, 15));
-        userPanel.setPreferredSize(new Dimension(170, 70));
+        userPanel.setPreferredSize(new Dimension(240, 100));
 
         JLabel avatar = new JLabel("👤");
-        avatar.setFont(new Font("Segoe UI", Font.PLAIN, 28));
+        avatar.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 28));
 
         JPanel userInfo = new JPanel(new GridLayout(2, 1));
         userInfo.setBackground(Color.WHITE);
         lblUserName = new JLabel("Admin");
         lblUserName.setForeground(Color.BLACK);
-        lblUserName.setFont(new Font("Segoe UI", Font.BOLD, 13));
-//        lblUserRole = new JLabel("Quản trị viên");
-//        lblUserRole.setForeground(new Color(150, 150, 170));
-//        lblUserRole.setFont(new Font("Segoe UI", Font.PLAIN, 11));
+        lblUserName.setFont(new Font("Segoe UI", Font.BOLD, 18));
+        lblUserRole = new JLabel("Quản trị viên");
+        lblUserRole.setForeground(new Color(150, 150, 170));
+        lblUserRole.setFont(new Font("Segoe UI", Font.PLAIN, 14));
         userInfo.add(lblUserName);
-//        userInfo.add(lblUserRole);
+        userInfo.add(lblUserRole);
 
         userPanel.add(avatar);
         userPanel.add(userInfo);
 
-        // Menu items
+        // ---- Menu ----
         JPanel menuPanel = new JPanel();
         menuPanel.setBackground(Color.WHITE);
         menuPanel.setLayout(new BoxLayout(menuPanel, BoxLayout.Y_AXIS));
 
         String[][] menus = {
             {"🏠", "Trang chủ",  "TRANGCHU"},
-            {"📚", "Sách",       "SACH"},
-            {"📥", "Phiếu nhập", "PHIEUNHAP"},
-            {"📤", "Phiếu xuất", "PHIEUXUAT"},
-            {"👥", "Khách hàng", "KHACHHANG"},
-            {"👤", "Nhân viên",  "NHANVIEN"},
-            {"🔑", "Tài khoản",  "TAIKHOAN"},
-            {"🛡", "Phân quyền", "PHANQUYEN"},
-            {"🎁", "Khuyến mãi", "KHUYENMAI"},
-            {"📊", "Thống kê",   "THONGKE"},
+            {"📚", "Sách",        "SACH"},
+            {"📥", "Phiếu nhập",  "PHIEUNHAP"},
+            {"📤", "Phiếu xuất",  "PHIEUXUAT"},
+            {"👥", "Khách hàng",  "KHACHHANG"},
+            {"👤", "Nhân viên",   "NHANVIEN"},
+            {"💳", "Tài khoản",   "TAIKHOAN"},
+            {"🔑", "Phân quyền",  "PHANQUYEN"},
+            {"🎁", "Khuyến mãi",  "KHUYENMAI"},
+            {"📊", "Thống kê",    "THONGKE"},
         };
 
         ButtonGroup bg = new ButtonGroup();
@@ -104,56 +104,80 @@ public class MainFrame extends JFrame {
             menuPanel.add(btn);
         }
 
-        // Logout
+        // ---- Logout ----
         JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 8));
         bottomPanel.setBackground(Color.WHITE);
-        JButton btnLogout = new JButton("  🚪  Đăng xuất");
-        btnLogout.setForeground(Color.BLACK);
+
+        JButton btnLogout = new JButton();
+        btnLogout.setLayout(new FlowLayout(FlowLayout.LEFT, 8, 0));
         btnLogout.setBackground(Color.WHITE);
         btnLogout.setBorderPainted(false);
         btnLogout.setFocusPainted(false);
-        btnLogout.setFont(new Font("Segoe UI", Font.PLAIN, 13));
+        btnLogout.setPreferredSize(new Dimension(240, 50));
         btnLogout.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        btnLogout.setPreferredSize(new Dimension(170, 38));
+
+        JLabel icLogout = new JLabel("🚪");
+        icLogout.setFont(new Font("Segoe UI Emoji", Font.BOLD, 16));
+        icLogout.setPreferredSize(new Dimension(26, 50));
+        icLogout.setHorizontalAlignment(SwingConstants.CENTER);
+
+        JLabel txLogout = new JLabel("Đăng xuất");
+        txLogout.setFont(new Font("Segoe UI", Font.BOLD, 14));
+        txLogout.setForeground(Color.BLACK);
+
+        btnLogout.add(icLogout);
+        btnLogout.add(txLogout);
         btnLogout.addActionListener(e -> {
             dispose();
             new Login().setVisible(true);
         });
         bottomPanel.add(btnLogout);
 
-        sidebar.add(userPanel,  BorderLayout.NORTH);
-        sidebar.add(menuPanel,  BorderLayout.CENTER);
+        sidebar.add(userPanel,   BorderLayout.NORTH);
+        sidebar.add(menuPanel,   BorderLayout.CENTER);
         sidebar.add(bottomPanel, BorderLayout.SOUTH);
         return sidebar;
     }
 
-    private JToggleButton createMenuButton(String icon, String label, String card) {
-        JToggleButton btn = new JToggleButton(icon + "  " + label);
-        btn.setMaximumSize(new Dimension(170, 40));
-        btn.setPreferredSize(new Dimension(170, 40));
-        btn.setHorizontalAlignment(SwingConstants.LEFT);
-        btn.setForeground(Color.BLACK);
+    private JToggleButton createMenuButton(String emoji, String label, String card) {
+        JToggleButton btn = new JToggleButton();
+        btn.setLayout(new FlowLayout(FlowLayout.LEFT, 8, -5));
+        btn.setMaximumSize(new Dimension(240, 50));
+        btn.setPreferredSize(new Dimension(240, 50));
         btn.setBackground(Color.WHITE);
         btn.setBorderPainted(false);
         btn.setFocusPainted(false);
-        btn.setFont(new Font("Segoe UI", Font.PLAIN, 13));
         btn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 
+        JLabel lblIcon = new JLabel(emoji);
+        lblIcon.setFont(new Font("Segoe UI Emoji", Font.BOLD, 14));
+        lblIcon.setPreferredSize(new Dimension(26, 50));
+        lblIcon.setHorizontalAlignment(SwingConstants.CENTER);
+
+        JLabel lblText = new JLabel(label);
+        lblText.setFont(new Font("Segoe UI", Font.BOLD, 14));
+        lblText.setForeground(Color.BLACK);
+
+        btn.add(lblIcon);
+        btn.add(lblText);
+
         btn.addActionListener(e -> {
-            btn.setBackground(new Color(230, 240, 255));
-            btn.setForeground(Color.BLACK);
             cardLayout.show(contentPanel, card);
         });
 
         btn.addChangeListener(e -> {
-            if (!btn.isSelected()) {
+            if (btn.isSelected()) {
+                btn.setBackground(new Color(225, 238, 255));
+                lblText.setForeground(new Color(0, 100, 200));
+            } else {
                 btn.setBackground(Color.WHITE);
-                btn.setForeground(Color.BLACK);
+                lblText.setForeground(Color.BLACK);
             }
         });
+
         return btn;
     }
-    
+
     public void setUserInfo(String name) {
         lblUserName.setText(name);
     }

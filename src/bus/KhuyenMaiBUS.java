@@ -91,4 +91,8 @@ public class KhuyenMaiBUS {
         }
         return ds;
     }
+    
+    public String generateMaKhuyenMai() {
+        return khuyenMaiDAO.generateMaKhuyenMai();
+    }
 }

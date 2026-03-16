@@ -15,7 +15,7 @@ public class KhuyenMaiDialog extends JDialog {
     private static final DateTimeFormatter FMT = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
     private JTextField txtMa, txtTen, txtDonToiThieu, txtPhanTram;
-    private JTextField txtNgayBD, txtNgayKT;   // nhập dạng dd/MM/yyyy
+    private JTextField txtNgayBD, txtNgayKT;
     private JComboBox<String> cboTrangThai;
     private JLabel lblError;
     private JButton btnLuu, btnHuy;
@@ -31,6 +31,12 @@ public class KhuyenMaiDialog extends JDialog {
         setLocationRelativeTo(parent);
         setResizable(false);
         init();
+        if (km != null) {
+            populateFields(km);
+        } else {
+            txtMa.setText(kmBUS.generateMaKhuyenMai());
+            txtMa.setEditable(false);
+        }
         if (km != null) populateFields(km);
     }
 
@@ -53,11 +59,9 @@ public class KhuyenMaiDialog extends JDialog {
         add(buildFooter(), BorderLayout.SOUTH);
     }
 
-    // ==================== FORM ====================
-
     private JPanel buildForm() {
         JPanel p = new JPanel(new GridBagLayout());
-        p.setBackground(new Color(240, 248, 255));
+        p.setBackground(Color.WHITE);
         p.setBorder(BorderFactory.createEmptyBorder(16, 20, 8, 20));
 
         GridBagConstraints gbc = new GridBagConstraints();
@@ -78,7 +82,7 @@ public class KhuyenMaiDialog extends JDialog {
             {"Mã khuyến mãi *",      txtMa},
             {"Tên khuyến mãi *",     txtTen},
             {"Đơn hàng tối thiểu *", txtDonToiThieu},
-            {"% Giảm *",             txtPhanTram},
+            {"Phần trăm giảm (%) *",             txtPhanTram},
             {"Ngày bắt đầu *",       txtNgayBD},
             {"Ngày kết thúc *",      txtNgayKT},
             {"Trạng thái",           cboTrangThai},
@@ -94,7 +98,6 @@ public class KhuyenMaiDialog extends JDialog {
             p.add((Component) rows[i][1], gbc);
         }
 
-        // Hint ngày
         JLabel hint = new JLabel("  * Ngày nhập định dạng: dd/MM/yyyy");
         hint.setFont(new Font("Segoe UI", Font.ITALIC, 11));
         hint.setForeground(new Color(120, 120, 140));
@@ -111,21 +114,19 @@ public class KhuyenMaiDialog extends JDialog {
         return p;
     }
 
-    // ==================== FOOTER ====================
-
     private JPanel buildFooter() {
         JPanel p = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 10));
-        p.setBackground(new Color(240, 248, 255));
+        p.setBackground(Color.WHITE);
         p.setBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, new Color(200, 200, 200)));
 
-        btnHuy = new JButton("✕  Hủy");
+        btnHuy = new JButton("Hủy");
         btnHuy.setPreferredSize(new Dimension(110, 34));
         btnHuy.setBackground(new Color(108, 117, 125));
         btnHuy.setForeground(Color.WHITE);
         btnHuy.setFont(new Font("Segoe UI", Font.BOLD, 13));
         btnHuy.setFocusPainted(false);
 
-        btnLuu = new JButton("💾  Lưu");
+        btnLuu = new JButton("Lưu");
         btnLuu.setPreferredSize(new Dimension(110, 34));
         btnLuu.setBackground(new Color(40, 167, 69));
         btnLuu.setForeground(Color.WHITE);
@@ -139,8 +140,6 @@ public class KhuyenMaiDialog extends JDialog {
         btnLuu.addActionListener(e -> handleLuu());
         return p;
     }
-
-    // ==================== ACTIONS ====================
 
     private void handleLuu() {
         lblError.setText("");

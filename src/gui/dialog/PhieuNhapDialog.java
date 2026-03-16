@@ -53,6 +53,12 @@ public class PhieuNhapDialog extends JDialog {
         setLocationRelativeTo(parent);
         setResizable(false);
         init();
+        if (pn != null) {
+            populateFields(pn);
+        } else {
+            txtMaPhieu.setText(phieuNhapBUS.generateMaPhieuNhap());
+            txtMaPhieu.setEditable(false);
+        }
         if (pn != null) populateFields(pn);
     }
     
@@ -84,10 +90,9 @@ public class PhieuNhapDialog extends JDialog {
         add(buildFooter(), BorderLayout.SOUTH);
     }
 
-    // ===== HEADER =====
     private JPanel buildHeader() {
         JPanel p = new JPanel(new GridLayout(2, 4, 10, 8));
-        p.setBackground(new Color(240, 248, 255));
+        p.setBackground(Color.WHITE);
         p.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createMatteBorder(0, 0, 1, 0, new Color(200, 200, 200)),
                 BorderFactory.createEmptyBorder(12, 16, 12, 16)));
@@ -111,15 +116,14 @@ public class PhieuNhapDialog extends JDialog {
         p.add(cboNCC);
         p.add(cboNhanVien);
 
-        // Row 2
         JPanel row2 = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 4));
-        row2.setBackground(new Color(240, 248, 255));
+        row2.setBackground(Color.WHITE);
         row2.add(label("Trạng thái:"));
-        cboTrangThai = new JComboBox<>(new String[]{"CHO_XU_LY", "DA_XU_LY", "HUY"});
+        cboTrangThai = new JComboBox<>(new String[]{"DA_NHAP", "HUY"});
         row2.add(cboTrangThai);
 
         JPanel wrap = new JPanel(new BorderLayout());
-        wrap.setBackground(new Color(240, 248, 255));
+        wrap.setBackground(Color.WHITE);
         wrap.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createMatteBorder(0, 0, 1, 0, new Color(200, 200, 200)),
                 BorderFactory.createEmptyBorder(0, 16, 8, 16)));
@@ -128,13 +132,12 @@ public class PhieuNhapDialog extends JDialog {
         return wrap;
     }
 
-    // ===== CHI TIET =====
+    // chi tiết
     private JPanel buildChiTietPanel() {
         JPanel panel = new JPanel(new BorderLayout(0, 6));
         panel.setBorder(BorderFactory.createEmptyBorder(10, 16, 10, 16));
         panel.setBackground(Color.WHITE);
 
-        // Input thêm sách
         JPanel inputRow = new JPanel(new FlowLayout(FlowLayout.LEFT, 8, 4));
         inputRow.setBackground(Color.WHITE);
 
@@ -145,7 +148,7 @@ public class PhieuNhapDialog extends JDialog {
         txtSoLuong = new JTextField("1", 6);
         txtGiaNhap = new JTextField("0", 10);
 
-        JButton btnThem = new JButton("+ Thêm sách");
+        JButton btnThem = new JButton("Thêm sách");
         btnThem.setBackground(new Color(0, 153, 255));
         btnThem.setForeground(Color.WHITE);
         btnThem.setFont(new Font("Segoe UI", Font.BOLD, 12));
@@ -167,7 +170,7 @@ public class PhieuNhapDialog extends JDialog {
         tblChiTiet.setRowHeight(28);
         tblChiTiet.setFont(new Font("Segoe UI", Font.PLAIN, 13));
         tblChiTiet.getTableHeader().setFont(new Font("Segoe UI", Font.BOLD, 13));
-        tblChiTiet.getTableHeader().setBackground(new Color(232, 245, 255));
+        tblChiTiet.getTableHeader().setBackground(new Color(234, 234, 234));
         tblChiTiet.getColumnModel().getColumn(5).setMaxWidth(60);
 
         // Nút xóa dòng
@@ -204,7 +207,7 @@ public class PhieuNhapDialog extends JDialog {
     // ===== FOOTER =====
     private JPanel buildFooter() {
         JPanel p = new JPanel(new BorderLayout());
-        p.setBackground(new Color(240, 248, 255));
+        p.setBackground(Color.WHITE);
         p.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createMatteBorder(1, 0, 0, 0, new Color(200, 200, 200)),
                 BorderFactory.createEmptyBorder(10, 16, 10, 16)));
@@ -214,15 +217,15 @@ public class PhieuNhapDialog extends JDialog {
         lblTongTien.setForeground(new Color(220, 53, 69));
 
         JPanel btnPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 0));
-        btnPanel.setBackground(new Color(240, 248, 255));
+        btnPanel.setBackground(Color.WHITE);
 
-        btnHuy = new JButton("✕  Hủy");
+        btnHuy = new JButton("Hủy");
         btnHuy.setPreferredSize(new Dimension(110, 36));
         btnHuy.setBackground(new Color(108, 117, 125));
         btnHuy.setForeground(Color.WHITE);
         btnHuy.setFont(new Font("Segoe UI", Font.BOLD, 13));
 
-        btnLuu = new JButton("💾  Lưu");
+        btnLuu = new JButton("Lưu");
         btnLuu.setPreferredSize(new Dimension(110, 36));
         btnLuu.setBackground(new Color(40, 167, 69));
         btnLuu.setForeground(Color.WHITE);

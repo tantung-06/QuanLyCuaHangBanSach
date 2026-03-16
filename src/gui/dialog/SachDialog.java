@@ -5,13 +5,9 @@ import bus.TacGiaBUS;
 import bus.NhaXuatBanBUS;
 import bus.TheLoaiBUS;
 import dto.Sach;
-import dto.TacGia;
-import dto.NhaXuatBan;
-import dto.TheLoai;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.ArrayList;
 
 public class SachDialog extends JDialog {
 
@@ -20,7 +16,6 @@ public class SachDialog extends JDialog {
     private final NhaXuatBanBUS nxbBUS  = new NhaXuatBanBUS();
     private final TheLoaiBUS    tlBUS   = new TheLoaiBUS();
 
-    // Fields
     private JTextField txtMaSach, txtTenSach, txtNamXuatBan, txtGiaBan, txtSoLuong;
     private JComboBox<String> cboTacGia, cboNXB, cboTheLoai, cboTrangThai;
     private JLabel lblError;
@@ -37,7 +32,12 @@ public class SachDialog extends JDialog {
         setLocationRelativeTo(parent);
         setResizable(false);
         init();
-        if (sach != null) populateFields(sach);
+        if (sach != null) {
+            populateFields(sach);
+        } else {
+            txtMaSach.setText(sachBUS.generateMaSach());
+            txtMaSach.setEditable(false);
+        }
     }
 
     public void setViewOnly(boolean viewOnly) {
@@ -65,7 +65,7 @@ public class SachDialog extends JDialog {
 
     private JPanel buildForm() {
         JPanel p = new JPanel(new GridBagLayout());
-        p.setBackground(new Color(240, 248, 255));
+        p.setBackground(Color.WHITE);
         p.setBorder(BorderFactory.createEmptyBorder(16, 20, 8, 20));
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(6, 6, 6, 6);
@@ -89,7 +89,7 @@ public class SachDialog extends JDialog {
         tlBUS.getAll().forEach(t ->
             cboTheLoai.addItem(t.getMaTheLoai() + " - " + t.getTenTheLoai()));
 
-        cboTrangThai = new JComboBox<>(new String[]{"DANG_BAN", "NGUNG_BAN"});
+        cboTrangThai = new JComboBox<>(new String[]{"CON_HANG", "HET_HANG"});
 
         Object[][] rows = {
             {"Mã sách *",       txtMaSach},
@@ -99,24 +99,23 @@ public class SachDialog extends JDialog {
             {"Thể loại *",      cboTheLoai},
             {"Năm xuất bản",    txtNamXuatBan},
             {"Giá bán *",       txtGiaBan},
-            {"Số lượng tồn",    txtSoLuong},
+            {"Số lượng",    txtSoLuong},
             {"Trạng thái",      cboTrangThai},
         };
 
         for (int i = 0; i < rows.length; i++) {
             gbc.gridx = 0; gbc.gridy = i; gbc.weightx = 0.3;
             JLabel lbl = new JLabel((String) rows[i][0]);
-            lbl.setFont(new Font("Segoe UI", Font.PLAIN, 13));
+            lbl.setFont(new Font("Segoe UI", Font.PLAIN, 14));
             p.add(lbl, gbc);
 
             gbc.gridx = 1; gbc.weightx = 0.7;
             p.add((Component) rows[i][1], gbc);
         }
 
-        // Error label
         lblError = new JLabel("");
         lblError.setForeground(new Color(220, 53, 69));
-        lblError.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+        lblError.setFont(new Font("Segoe UI", Font.PLAIN, 14));
         gbc.gridx = 0; gbc.gridy = rows.length;
         gbc.gridwidth = 2;
         p.add(lblError, gbc);
@@ -128,21 +127,21 @@ public class SachDialog extends JDialog {
 
     private JPanel buildFooter() {
         JPanel p = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 10));
-        p.setBackground(new Color(240, 248, 255));
+        p.setBackground(Color.WHITE);
         p.setBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, new Color(200, 200, 200)));
 
-        btnHuy = new JButton("✕  Hủy");
+        btnHuy = new JButton("Hủy");
         btnHuy.setPreferredSize(new Dimension(110, 34));
         btnHuy.setBackground(new Color(108, 117, 125));
         btnHuy.setForeground(Color.WHITE);
-        btnHuy.setFont(new Font("Segoe UI", Font.BOLD, 13));
+        btnHuy.setFont(new Font("Segoe UI", Font.BOLD, 14));
         btnHuy.setFocusPainted(false);
 
-        btnLuu = new JButton("💾  Lưu");
+        btnLuu = new JButton("Lưu");
         btnLuu.setPreferredSize(new Dimension(110, 34));
         btnLuu.setBackground(new Color(40, 167, 69));
         btnLuu.setForeground(Color.WHITE);
-        btnLuu.setFont(new Font("Segoe UI", Font.BOLD, 13));
+        btnLuu.setFont(new Font("Segoe UI", Font.BOLD, 14));
         btnLuu.setFocusPainted(false);
 
         p.add(btnHuy);
@@ -200,7 +199,7 @@ public class SachDialog extends JDialog {
 
     private void populateFields(Sach s) {
         txtMaSach.setText(s.getMaSach());
-        txtMaSach.setEditable(false); // không cho sửa mã
+        txtMaSach.setEditable(false);
         txtTenSach.setText(s.getTenSach());
         txtNamXuatBan.setText(String.valueOf(s.getNamXuatBan()));
         txtGiaBan.setText(String.valueOf((long) s.getGiaBan()));
