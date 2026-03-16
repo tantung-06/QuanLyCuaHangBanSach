@@ -55,15 +55,19 @@ public class MainFrame extends JFrame {
         sidebar.setPreferredSize(new Dimension(240, 1080));
         sidebar.setBackground(Color.WHITE);
         sidebar.setLayout(new BorderLayout());
+        sidebar.setBorder(BorderFactory.createMatteBorder(0, 0, 0, 1, new Color(220, 220, 220)));
 
         // ---- User info ----
         JPanel userPanel = new JPanel();
         userPanel.setBackground(Color.WHITE);
         userPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 10, 15));
-        userPanel.setPreferredSize(new Dimension(240, 100));
+        userPanel.setPreferredSize(new Dimension(240, 80));
+        userPanel.setBorder(BorderFactory.createMatteBorder(0, 0, 2, 0, new Color(220, 220, 220)));
 
         JLabel avatar = new JLabel("👤");
         avatar.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 28));
+        avatar.setPreferredSize(new Dimension(40, 40));
+        avatar.setVerticalAlignment(SwingConstants.CENTER);
 
         JPanel userInfo = new JPanel(new GridLayout(2, 1));
         userInfo.setBackground(Color.WHITE);
@@ -148,6 +152,9 @@ public class MainFrame extends JFrame {
         btn.setBorderPainted(false);
         btn.setFocusPainted(false);
         btn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        
+        btn.setContentAreaFilled(false);
+        btn.setOpaque(true);
 
         JLabel lblIcon = new JLabel(emoji);
         lblIcon.setFont(new Font("Segoe UI Emoji", Font.BOLD, 14));
@@ -167,8 +174,8 @@ public class MainFrame extends JFrame {
 
         btn.addChangeListener(e -> {
             if (btn.isSelected()) {
-                btn.setBackground(new Color(225, 238, 255));
-                lblText.setForeground(new Color(0, 100, 200));
+                btn.setBackground(new Color(204, 255, 255));
+                lblText.setForeground(Color.BLACK);
             } else {
                 btn.setBackground(Color.WHITE);
                 lblText.setForeground(Color.BLACK);
@@ -181,7 +188,7 @@ public class MainFrame extends JFrame {
     public void setUserInfo(String name) {
         lblUserName.setText(name);
     }
-
+    
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> new MainFrame().setVisible(true));
     }

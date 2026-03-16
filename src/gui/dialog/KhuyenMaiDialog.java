@@ -63,6 +63,7 @@ public class KhuyenMaiDialog extends JDialog {
         JPanel p = new JPanel(new GridBagLayout());
         p.setBackground(Color.WHITE);
         p.setBorder(BorderFactory.createEmptyBorder(16, 20, 8, 20));
+        p.setBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, new Color(200, 200, 200)));
 
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(6, 6, 6, 6);

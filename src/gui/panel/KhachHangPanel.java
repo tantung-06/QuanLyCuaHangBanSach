@@ -131,7 +131,7 @@ public class KhachHangPanel extends JPanel {
     private JButton makeBtn(String iconFile, String text, ActionListener action) {
         JButton btn = new JButton();
         btn.setLayout(new BorderLayout());
-        btn.setPreferredSize(new Dimension(80, 76));
+        btn.setPreferredSize(new Dimension(90, 80));
         btn.setFocusPainted(false);
         btn.setBorderPainted(false);
         btn.setOpaque(false);
@@ -145,12 +145,12 @@ public class KhachHangPanel extends JPanel {
             if (url != null) {
                 lblIcon.setIcon(new ImageIcon(
                     new ImageIcon(url).getImage()
-                        .getScaledInstance(36, 36, Image.SCALE_SMOOTH)));
+                        .getScaledInstance(40, 40, Image.SCALE_SMOOTH)));
             }
         } catch (Exception ignored) {}
 
         JLabel lblText = new JLabel(text, SwingConstants.CENTER);
-        lblText.setFont(new Font("Segoe UI", Font.BOLD, 18));
+        lblText.setFont(new Font("Segoe UI", Font.BOLD, 16));
         lblText.setForeground(new Color(50, 50, 50));
 
         JPanel wrap = new JPanel();

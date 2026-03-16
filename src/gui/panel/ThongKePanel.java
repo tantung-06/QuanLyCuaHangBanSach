@@ -1,6 +1,9 @@
 package gui.panel;
 
 import dao.PhieuXuatDAO;
+import dao.SachDAO;
+import dao.KhachHangDAO;
+import dao.NhanVienDAO;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -16,8 +19,14 @@ import java.util.Locale;
 public class ThongKePanel extends JPanel {
 
     private final PhieuXuatDAO pxDAO = new PhieuXuatDAO();
+    private final SachDAO sachDAO = new SachDAO();
+    private final KhachHangDAO khachHangDAO = new KhachHangDAO();
+    private final NhanVienDAO nhanVienDAO = new NhanVienDAO();
     private static final NumberFormat FMT = NumberFormat.getNumberInstance(new Locale("vi", "VN"));
     private static final Color BG = new Color(235, 252, 255);
+
+    // Summary labels
+    private JLabel lblTongSach, lblTongKhach, lblNhanVienHoatDong;
 
     // Filter
     private JComboBox<String> cboThang, cboNam;
@@ -32,9 +41,83 @@ public class ThongKePanel extends JPanel {
         setLayout(new BorderLayout(0, 10));
         setBackground(BG);
         setBorder(new EmptyBorder(12, 14, 12, 14));
-        add(buildFilterBar(), BorderLayout.NORTH);
+        add(buildHeader(), BorderLayout.NORTH);
         add(buildCenter(), BorderLayout.CENTER);
         loadAll();
+    }
+
+    // ==================== HEADER (summary + filter) ====================
+    private JPanel buildHeader() {
+        JPanel header = new JPanel();
+        header.setLayout(new BoxLayout(header, BoxLayout.Y_AXIS));
+        header.setBackground(BG);
+
+        JPanel summary = buildSummaryCards();
+        summary.setAlignmentX(Component.LEFT_ALIGNMENT);
+        header.add(summary);
+        header.add(Box.createVerticalStrut(10));
+
+        JPanel filter = buildFilterBar();
+        filter.setAlignmentX(Component.LEFT_ALIGNMENT);
+        header.add(filter);
+
+        return header;
+    }
+
+    private JPanel buildSummaryCards() {
+        JPanel panel = new JPanel(new GridLayout(1, 3, 12, 0));
+        panel.setBackground(BG);
+
+        lblTongSach = new JLabel("0", SwingConstants.CENTER);
+        lblTongKhach = new JLabel("0", SwingConstants.CENTER);
+        lblNhanVienHoatDong = new JLabel("0", SwingConstants.CENTER);
+
+        panel.add(createSummaryCard(
+                lblTongSach,
+                "Sách hiện có trong kho",
+                () -> showSachConHangDialog()
+        ));
+        panel.add(createSummaryCard(
+                lblTongKhach,
+                "Khách từ trước đến nay",
+                () -> showKhachHangDialog()
+        ));
+        panel.add(createSummaryCard(
+                lblNhanVienHoatDong,
+                "Nhân viên đang hoạt động",
+                () -> showNhanVienHoatDongDialog()
+        ));
+
+        return panel;
+    }
+
+    private JPanel createSummaryCard(JLabel numberLabel, String subtitle, Runnable onClick) {
+        JPanel card = new JPanel();
+        card.setLayout(new BorderLayout());
+        card.setBackground(new Color(0, 183, 255));
+        card.setBorder(BorderFactory.createEmptyBorder(10, 16, 10, 16));
+
+        numberLabel.setFont(new Font("Segoe UI", Font.BOLD, 24));
+        numberLabel.setForeground(Color.WHITE);
+
+        JLabel lblSub = new JLabel(subtitle, SwingConstants.CENTER);
+        lblSub.setForeground(Color.WHITE);
+        lblSub.setFont(new Font("Segoe UI", Font.PLAIN, 13));
+
+        card.add(numberLabel, BorderLayout.CENTER);
+        card.add(lblSub, BorderLayout.SOUTH);
+
+        card.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        card.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseClicked(java.awt.event.MouseEvent e) {
+                if (onClick != null) {
+                    onClick.run();
+                }
+            }
+        });
+
+        return card;
     }
 
     // ==================== FILTER BAR ====================
@@ -64,7 +147,7 @@ public class ThongKePanel extends JPanel {
         cboNam.setPreferredSize(new Dimension(80, 30));
         bar.add(cboNam);
 
-        JButton btnLoad = new JButton("🔍  Xem");
+        JButton btnLoad = new JButton("Xem");
         btnLoad.setPreferredSize(new Dimension(100, 30));
         btnLoad.setBackground(new Color(0, 120, 200));
         btnLoad.setForeground(Color.WHITE);
@@ -89,7 +172,7 @@ public class ThongKePanel extends JPanel {
         chartPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 280));
         chartPanel.setPreferredSize(new Dimension(800, 260));
 
-        JPanel chartCard = wrapCard(chartPanel, "📈  Doanh thu theo ngày");
+        JPanel chartCard = wrapCard(chartPanel, "Doanh thu theo ngày");
         chartCard.setAlignmentX(Component.LEFT_ALIGNMENT);
         center.add(chartCard);
         center.add(Box.createVerticalStrut(12));
@@ -98,8 +181,8 @@ public class ThongKePanel extends JPanel {
         JPanel tableRow = new JPanel(new GridLayout(1, 2, 12, 0));
         tableRow.setBackground(BG);
         tableRow.setAlignmentX(Component.LEFT_ALIGNMENT);
-        tableRow.add(wrapCard(buildTopSachTable(), "🏆  Top 10 sách bán chạy"));
-        tableRow.add(wrapCard(buildTongHopTable(), "📅  Tổng hợp theo tháng trong năm"));
+        tableRow.add(wrapCard(buildTopSachTable(), "Top 10 sách bán chạy"));
+        tableRow.add(wrapCard(buildTongHopTable(), "Tổng hợp theo tháng trong năm"));
 
         center.add(tableRow);
         return center;
@@ -186,6 +269,9 @@ public class ThongKePanel extends JPanel {
         int thang = cboThang.getSelectedIndex() + 1;
         int nam = Integer.parseInt((String) cboNam.getSelectedItem());
 
+        // 0. Summary cards
+        updateSummary();
+
         // 1. Line chart
         ArrayList<Object[]> doanhThuNgay = pxDAO.getDoanhThuTheoNgay(thang, nam);
         chartPanel.setData(doanhThuNgay, thang, nam);
@@ -214,6 +300,92 @@ public class ThongKePanel extends JPanel {
                 FMT.format(row[2]) + " ₫"
             });
         }
+    }
+
+    private void updateSummary() {
+        try {
+            // Sách còn hàng
+            int tongSach = sachDAO.getByTrangThai("CON_HANG").size();
+            // Tất cả khách hàng (kể cả ngừng)
+            int tongKhach = khachHangDAO.getAll().size();
+            // Nhân viên đang hoạt động
+            int nvHoatDong = nhanVienDAO.getByTrangThai("HOAT_DONG").size();
+
+            lblTongSach.setText(String.valueOf(tongSach));
+            lblTongKhach.setText(String.valueOf(tongKhach));
+            lblNhanVienHoatDong.setText(String.valueOf(nvHoatDong));
+        } catch (Exception ex) {
+            // nếu có lỗi, giữ giá trị cũ để UI không bị crash
+        }
+    }
+
+    // ==================== DIALOG HIỂN THỊ DANH SÁCH ====================
+    private void showSachConHangDialog() {
+        java.util.List<dto.Sach> list = sachDAO.getByTrangThai("CON_HANG");
+        String[] cols = {"Mã sách", "Tên sách", "Giá bán", "Tồn kho"};
+        Object[][] data = new Object[list.size()][cols.length];
+        for (int i = 0; i < list.size(); i++) {
+            dto.Sach s = list.get(i);
+            data[i][0] = s.getMaSach();
+            data[i][1] = s.getTenSach();
+            data[i][2] = FMT.format(s.getGiaBan()) + " ₫";
+            data[i][3] = s.getSoLuongTon();
+        }
+        showSimpleTableDialog("Sách hiện có trong kho", cols, data);
+    }
+
+    private void showKhachHangDialog() {
+        java.util.List<dto.KhachHang> list = khachHangDAO.getAll();
+        String[] cols = {"Mã KH", "Họ", "Tên", "SĐT", "Email", "Trạng thái"};
+        Object[][] data = new Object[list.size()][cols.length];
+        for (int i = 0; i < list.size(); i++) {
+            dto.KhachHang kh = list.get(i);
+            data[i][0] = kh.getMaKhachHang();
+            data[i][1] = kh.getHo();
+            data[i][2] = kh.getTen();
+            data[i][3] = kh.getSoDienThoai();
+            data[i][4] = kh.getEmail();
+            data[i][5] = kh.getTrangThai();
+        }
+        showSimpleTableDialog("Khách hàng từ trước đến nay", cols, data);
+    }
+
+    private void showNhanVienHoatDongDialog() {
+        java.util.List<dto.NhanVien> list = nhanVienDAO.getByTrangThai("HOAT_DONG");
+        String[] cols = {"Mã NV", "Họ", "Tên", "SĐT", "Email", "Trạng thái"};
+        Object[][] data = new Object[list.size()][cols.length];
+        for (int i = 0; i < list.size(); i++) {
+            dto.NhanVien nv = list.get(i);
+            data[i][0] = nv.getMaNhanVien();
+            data[i][1] = nv.getHo();
+            data[i][2] = nv.getTen();
+            data[i][3] = nv.getSoDienThoai();
+            data[i][4] = nv.getEmail();
+            data[i][5] = nv.getTrangThai();
+        }
+        showSimpleTableDialog("Nhân viên đang hoạt động", cols, data);
+    }
+
+    private void showSimpleTableDialog(String title, String[] columns, Object[][] data) {
+        Window owner = SwingUtilities.getWindowAncestor(this);
+        JDialog dlg = owner instanceof Frame
+                ? new JDialog((Frame) owner, title, true)
+                : new JDialog((Dialog) owner, title, true);
+
+        DefaultTableModel model = new DefaultTableModel(data, columns) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+        JTable table = new JTable(model);
+        table.setRowHeight(26);
+        table.setAutoCreateRowSorter(true);
+
+        dlg.getContentPane().add(new JScrollPane(table), BorderLayout.CENTER);
+        dlg.setSize(800, 400);
+        dlg.setLocationRelativeTo(owner);
+        dlg.setVisible(true);
     }
 
     // ==================== LINE CHART ====================

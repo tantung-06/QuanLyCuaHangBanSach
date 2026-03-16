@@ -96,7 +96,7 @@ public class PhieuXuatDialog extends JDialog {
         JPanel wrap = new JPanel(new BorderLayout());
         wrap.setBackground(Color.WHITE);
         wrap.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createMatteBorder(0, 0, 1, 0, new Color(200, 200, 200)),
+                BorderFactory.createMatteBorder(1, 0, 1, 0, new Color(200, 200, 200)),
                 BorderFactory.createEmptyBorder(12, 16, 8, 16)));
 
         // Row 1: mã, ngày, KH, NV
@@ -177,7 +177,7 @@ public class PhieuXuatDialog extends JDialog {
             if (s != null) txtGiaBan.setText(String.valueOf((long) s.getGiaBan()));
         });
 
-        JButton btnThemSach = new JButton("+ Thêm sách");
+        JButton btnThemSach = new JButton("Thêm sách");
         btnThemSach.setBackground(new Color(0, 153, 255));
         btnThemSach.setForeground(Color.WHITE);
         btnThemSach.setFocusPainted(false);

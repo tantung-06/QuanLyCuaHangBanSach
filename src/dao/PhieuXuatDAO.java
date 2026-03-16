@@ -211,12 +211,56 @@ public class PhieuXuatDAO {
         return "PX001";
     }
     
+    // Thống kê vốn - doanh thu - lợi nhuận theo ngày (8 ngày gần nhất)
+    public ArrayList<Object[]> getThongKeVonDoanhThu8NgayGanNhat() {
+        ArrayList<Object[]> ds = new ArrayList<>();
+        String sql =
+                "SELECT d.ngay, " +
+                "       IFNULL(v.von, 0) AS von, " +
+                "       IFNULL(dt.doanh_thu, 0) AS doanh_thu, " +
+                "       IFNULL(dt.doanh_thu, 0) - IFNULL(v.von, 0) AS loi_nhuan " +
+                "FROM ( " +
+                "    SELECT ngayNhap AS ngay FROM PhieuNhap " +
+                "    UNION " +
+                "    SELECT ngayLap  AS ngay FROM PhieuXuat " +
+                ") d " +
+                "LEFT JOIN ( " +
+                "    SELECT ngayNhap AS ngay, SUM(tongTien) AS von " +
+                "    FROM PhieuNhap " +
+                "    WHERE trangThai = 'DA_NHAP' " +
+                "    GROUP BY ngayNhap " +
+                ") v ON v.ngay = d.ngay " +
+                "LEFT JOIN ( " +
+                "    SELECT ngayLap AS ngay, SUM(tongTien) AS doanh_thu " +
+                "    FROM PhieuXuat " +
+                "    WHERE trangThai = 'DA_XUAT' " +
+                "    GROUP BY ngayLap " +
+                ") dt ON dt.ngay = d.ngay " +
+                "ORDER BY d.ngay DESC " +
+                "LIMIT 8";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                java.time.LocalDate ngay = rs.getDate("ngay").toLocalDate();
+                double von = rs.getDouble("von");
+                double doanhThu = rs.getDouble("doanh_thu");
+                double loiNhuan = rs.getDouble("loi_nhuan");
+                ds.add(new Object[]{ngay, von, doanhThu, loiNhuan});
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return ds;
+    }
+
     // Doanh thu theo ngày trong tháng/năm chỉ định
     public ArrayList<Object[]> getDoanhThuTheoNgay(int thang, int nam) {
         ArrayList<Object[]> ds = new ArrayList<>();
         String sql = "SELECT ngayLap, SUM(tongTien) " +
                      "FROM PhieuXuat " +
-                     "WHERE trangThai='DA_XU_LY' " +
+                     "WHERE trangThai='DA_XUAT' " +
                      "  AND MONTH(ngayLap)=? AND YEAR(ngayLap)=? " +
                      "GROUP BY ngayLap ORDER BY ngayLap ASC";
         try (Connection conn = DatabaseConnection.getConnection();
@@ -230,7 +274,9 @@ public class PhieuXuatDAO {
                     rs.getDouble(2)
                 });
             }
-        } catch (SQLException e) { e.printStackTrace(); }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         return ds;
     }
 
@@ -241,7 +287,7 @@ public class PhieuXuatDAO {
                      "FROM ChiTietPhieuXuat ct " +
                      "JOIN Sach s ON ct.maSach = s.maSach " +
                      "JOIN PhieuXuat px ON ct.maPhieuXuat = px.maPhieuXuat " +
-                     "WHERE px.trangThai='DA_XU_LY' " +
+                     "WHERE px.trangThai='DA_XUAT' " +
                      "GROUP BY s.maSach, s.tenSach " +
                      "ORDER BY tongSL DESC LIMIT ?";
         try (Connection conn = DatabaseConnection.getConnection();
@@ -255,7 +301,9 @@ public class PhieuXuatDAO {
                     rs.getDouble("tongTien")
                 });
             }
-        } catch (SQLException e) { e.printStackTrace(); }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         return ds;
     }
 
@@ -266,7 +314,7 @@ public class PhieuXuatDAO {
                      "       COUNT(*) AS soPhieu, " +
                      "       SUM(tongTien) AS doanhThu " +
                      "FROM PhieuXuat " +
-                     "WHERE trangThai='DA_XU_LY' AND YEAR(ngayLap)=? " +
+                     "WHERE trangThai='DA_XUAT' AND YEAR(ngayLap)=? " +
                      "GROUP BY MONTH(ngayLap) ORDER BY thang ASC";
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -279,7 +327,9 @@ public class PhieuXuatDAO {
                     rs.getDouble("doanhThu")
                 });
             }
-        } catch (SQLException e) { e.printStackTrace(); }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         return ds;
     }
 }

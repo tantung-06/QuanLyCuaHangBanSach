@@ -47,7 +47,7 @@ public class PhieuNhapDialog extends JDialog {
     private static final DateTimeFormatter FMT = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
     public PhieuNhapDialog(JFrame parent, PhieuNhap pn) {
-        super(parent, pn == null ? "Thêm Phiếu Nhập" : "Sửa Phiếu Nhập", true);
+        super(parent, pn == null ? "Thêm Phiếu Nhập" : "Chi Tiết Phiếu Nhập", true);
         this.editPhieu = pn;
         setSize(820, 620);
         setLocationRelativeTo(parent);
@@ -94,7 +94,7 @@ public class PhieuNhapDialog extends JDialog {
         JPanel p = new JPanel(new GridLayout(2, 4, 10, 8));
         p.setBackground(Color.WHITE);
         p.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createMatteBorder(0, 0, 1, 0, new Color(200, 200, 200)),
+                BorderFactory.createMatteBorder(1, 0, 1, 0, new Color(200, 200, 200)),
                 BorderFactory.createEmptyBorder(12, 16, 12, 16)));
 
         p.add(label("Mã phiếu nhập *"));
