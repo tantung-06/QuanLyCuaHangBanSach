@@ -16,9 +16,9 @@ import java.util.ArrayList;
 
 public class PhieuNhapPanel extends JPanel {
 
-    private final PhieuNhapBUS  phieuNhapBUS = new PhieuNhapBUS();
-    private final NhaCungCapBUS nccBUS       = new NhaCungCapBUS();
-    private final NhanVienBUS   nvBUS        = new NhanVienBUS();
+    private final PhieuNhapBUS phieuNhapBUS = new PhieuNhapBUS();
+    private final NhaCungCapBUS nccBUS = new NhaCungCapBUS();
+    private final NhanVienBUS nvBUS = new NhanVienBUS();
 
     private JButton btnThem, btnChiTiet, btnHuy;
     private JComboBox<String> cboFilter;
@@ -42,10 +42,10 @@ public class PhieuNhapPanel extends JPanel {
     // ==================== PADDING ====================
 
     private void initPadding() {
-        addPad(BorderLayout.NORTH,  0, 10);
-        addPad(BorderLayout.SOUTH,  0, 10);
-        addPad(BorderLayout.EAST,  10,  0);
-        addPad(BorderLayout.WEST,  10,  0);
+        addPad(BorderLayout.NORTH, 0, 10);
+        addPad(BorderLayout.SOUTH, 0, 10);
+        addPad(BorderLayout.EAST, 10, 0);
+        addPad(BorderLayout.WEST, 10, 0);
     }
 
     private void addPad(String pos, int w, int h) {
@@ -62,7 +62,7 @@ public class PhieuNhapPanel extends JPanel {
         contentCenter.setBackground(BG);
         add(contentCenter, BorderLayout.CENTER);
         contentCenter.add(buildFunctionBar(), BorderLayout.NORTH);
-        contentCenter.add(buildTablePanel(),  BorderLayout.CENTER);
+        contentCenter.add(buildTablePanel(), BorderLayout.CENTER);
     }
 
     // ==================== FUNCTION BAR ====================
@@ -77,9 +77,9 @@ public class PhieuNhapPanel extends JPanel {
         JPanel btnPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 12, 0));
         btnPanel.setBackground(Color.WHITE);
 
-        btnThem    = makeBtn("ic_them.png",    "Thêm",      e -> openDialog(null));
-        btnChiTiet = makeBtn("ic_chitiet.png", "Chi tiết",  e -> handleChiTiet());
-        btnHuy     = makeBtn("ic_huy.png",     "Hủy phiếu", e -> handleHuy());
+        btnThem = makeBtn("ic_them.png", "Thêm", e -> openDialog(null));
+        btnChiTiet = makeBtn("ic_chitiet.png", "Chi tiết", e -> handleChiTiet());
+        btnHuy = makeBtn("ic_huy.png", "Hủy phiếu", e -> handleHuy());
 
         btnPanel.add(btnThem);
         btnPanel.add(btnChiTiet);
@@ -92,7 +92,7 @@ public class PhieuNhapPanel extends JPanel {
         JPanel searchRow = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 0));
         searchRow.setBackground(Color.WHITE);
 
-        cboFilter = new JComboBox<>(new String[]{"Tất cả", "DA_NHAP", "HUY"});
+        cboFilter = new JComboBox<>(new String[] { "Tất cả", "DA_NHAP", "HUY" });
         cboFilter.setPreferredSize(new Dimension(130, 34));
         cboFilter.addActionListener(e -> applyFilter());
 
@@ -103,7 +103,9 @@ public class PhieuNhapPanel extends JPanel {
                 BorderFactory.createLineBorder(new Color(200, 210, 220), 1, true),
                 BorderFactory.createEmptyBorder(2, 8, 2, 8)));
         txtSearch.addKeyListener(new KeyAdapter() {
-            public void keyReleased(KeyEvent e) { applyFilter(); }
+            public void keyReleased(KeyEvent e) {
+                applyFilter();
+            }
         });
 
         JButton btnLamMoi = new JButton("Làm mới");
@@ -123,7 +125,7 @@ public class PhieuNhapPanel extends JPanel {
 
         searchWrapper.add(searchRow, new GridBagConstraints());
 
-        bar.add(btnPanel,      BorderLayout.WEST);
+        bar.add(btnPanel, BorderLayout.WEST);
         bar.add(searchWrapper, BorderLayout.EAST);
         return bar;
     }
@@ -146,10 +148,11 @@ public class PhieuNhapPanel extends JPanel {
             java.net.URL url = getClass().getResource("/icon/" + iconFile);
             if (url != null) {
                 lblIcon.setIcon(new ImageIcon(
-                    new ImageIcon(url).getImage()
-                        .getScaledInstance(40, 40, Image.SCALE_SMOOTH)));
+                        new ImageIcon(url).getImage()
+                                .getScaledInstance(40, 40, Image.SCALE_SMOOTH)));
             }
-        } catch (Exception ignored) {}
+        } catch (Exception ignored) {
+        }
 
         JLabel lblText = new JLabel(text, SwingConstants.CENTER);
         lblText.setFont(new Font("Segoe UI", Font.BOLD, 16));
@@ -175,10 +178,12 @@ public class PhieuNhapPanel extends JPanel {
         panel.setBackground(Color.WHITE);
         panel.setBorder(BorderFactory.createLineBorder(new Color(220, 230, 240)));
 
-        String[] cols = {"Mã phiếu nhập", "Ngày nhập", "Nhân viên",
-                         "Nhà cung cấp", "Tổng tiền", "Trạng thái"};
+        String[] cols = { "Mã phiếu nhập", "Ngày nhập", "Nhân viên",
+                "Nhà cung cấp", "Tổng tiền", "Trạng thái" };
         tableModel = new DefaultTableModel(cols, 0) {
-            public boolean isCellEditable(int r, int c) { return false; }
+            public boolean isCellEditable(int r, int c) {
+                return false;
+            }
         };
 
         table = new JTable(tableModel);
@@ -204,12 +209,18 @@ public class PhieuNhapPanel extends JPanel {
                 super.getTableCellRendererComponent(t, v, sel, foc, row, col);
                 setHorizontalAlignment(col == 2 ? SwingConstants.LEFT : SwingConstants.CENTER);
                 setBorder(new EmptyBorder(0, 8, 0, 8));
-                if (!sel) setBackground(Color.WHITE);
+                if (!sel)
+                    setBackground(Color.WHITE);
                 if (col == 5 && v != null) {
                     switch (v.toString()) {
-                        case "DA_NHAP":  setForeground(new Color(34, 139, 34)); break;
-                        case "HUY":       setForeground(new Color(200, 50, 50));  break;
-                        default:          setForeground(Color.BLACK);
+                        case "DA_NHAP":
+                            setForeground(new Color(34, 139, 34));
+                            break;
+                        case "HUY":
+                            setForeground(new Color(200, 50, 50));
+                            break;
+                        default:
+                            setForeground(Color.BLACK);
                     }
                 } else {
                     setForeground(Color.BLACK);
@@ -221,7 +232,8 @@ public class PhieuNhapPanel extends JPanel {
         // Double click → chi tiết
         table.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
-                if (e.getClickCount() == 2) handleChiTiet();
+                if (e.getClickCount() == 2)
+                    handleChiTiet();
             }
         });
 
@@ -251,13 +263,13 @@ public class PhieuNhapPanel extends JPanel {
     private void renderTable(ArrayList<PhieuNhap> ds) {
         tableModel.setRowCount(0);
         for (PhieuNhap pn : ds) {
-            tableModel.addRow(new Object[]{
-                pn.getMaPhieuNhap(),
-                pn.getNgayNhap() != null ? pn.getNgayNhap().format(FMT) : "",
-                pn.getMaNhanVien(),
-                pn.getMaNCC(),
-                String.format("%,.0f ₫", pn.getTongTien()),
-                pn.getTrangThai()
+            tableModel.addRow(new Object[] {
+                    pn.getMaPhieuNhap(),
+                    pn.getNgayNhap() != null ? pn.getNgayNhap().format(FMT) : "",
+                    pn.getMaNhanVien(),
+                    pn.getMaNCC(),
+                    String.format("%,.0f ₫", pn.getTongTien()),
+                    pn.getTrangThai()
             });
         }
     }
@@ -271,12 +283,14 @@ public class PhieuNhapPanel extends JPanel {
         ArrayList<PhieuNhap> filtered = new ArrayList<>();
         for (PhieuNhap pn : danhSach) {
             if (!kw.isEmpty()
-                && !pn.getMaPhieuNhap().toLowerCase().contains(kw)
-                && !pn.getMaNhanVien().toLowerCase().contains(kw)
-                && !pn.getMaNCC().toLowerCase().contains(kw)) continue;
+                    && !pn.getMaPhieuNhap().toLowerCase().contains(kw)
+                    && !pn.getMaNhanVien().toLowerCase().contains(kw)
+                    && !pn.getMaNCC().toLowerCase().contains(kw))
+                continue;
 
             if (tt != null && !"Tất cả".equals(tt)
-                && !tt.equals(pn.getTrangThai())) continue;
+                    && !tt.equals(pn.getTrangThai()))
+                continue;
 
             filtered.add(pn);
         }
@@ -297,7 +311,8 @@ public class PhieuNhapPanel extends JPanel {
 
     private void handleChiTiet() {
         PhieuNhap pn = getSelected();
-        if (pn == null) return;
+        if (pn == null)
+            return;
         PhieuNhapDialog dialog = new PhieuNhapDialog(
                 (JFrame) SwingUtilities.getWindowAncestor(this), pn);
         dialog.setViewOnly(true);
@@ -306,7 +321,8 @@ public class PhieuNhapPanel extends JPanel {
 
     private void handleHuy() {
         PhieuNhap pn = getSelected();
-        if (pn == null) return;
+        if (pn == null)
+            return;
 
         if ("HUY".equals(pn.getTrangThai())) {
             JOptionPane.showMessageDialog(this, "Phiếu này đã bị hủy rồi!",
@@ -316,9 +332,10 @@ public class PhieuNhapPanel extends JPanel {
 
         int confirm = JOptionPane.showConfirmDialog(this,
                 "Xác nhận hủy phiếu nhập " + pn.getMaPhieuNhap()
-                + "?\n(Tồn kho sẽ được hoàn lại)",
+                        + "?\n(Tồn kho sẽ được hoàn lại)",
                 "Xác nhận hủy", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
-        if (confirm != JOptionPane.YES_OPTION) return;
+        if (confirm != JOptionPane.YES_OPTION)
+            return;
 
         try {
             phieuNhapBUS.updateTrangThai(pn.getMaPhieuNhap(), "HUY");
@@ -334,6 +351,7 @@ public class PhieuNhapPanel extends JPanel {
         PhieuNhapDialog dialog = new PhieuNhapDialog(
                 (JFrame) SwingUtilities.getWindowAncestor(this), pn);
         dialog.setVisible(true);
-        if (dialog.isSaved()) loadData();
+        if (dialog.isSaved())
+            loadData();
     }
 }

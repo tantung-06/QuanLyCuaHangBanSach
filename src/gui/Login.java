@@ -143,8 +143,17 @@ public class Login extends JFrame {
                 JOptionPane.showMessageDialog(this,
                         "Đăng nhập thành công! Xin chào " + tk.getTenDangNhap(),
                         "Thành công", JOptionPane.INFORMATION_MESSAGE);
+
+                // Lấy tên vai trò từ nhóm quyền
+                bus.NhomQuyenBUS nqBUS = new bus.NhomQuyenBUS();
+                String roleName = "";
+                if (tk.getMaNhomQuyen() != null) {
+                    dto.NhomQuyen nq = nqBUS.getById(tk.getMaNhomQuyen());
+                    if (nq != null) roleName = nq.getTenNhomQuyen();
+                }
+
                 MainFrame mainJFrame = new MainFrame();
-                mainJFrame.setUserInfo(tk.getTenDangNhap());
+                mainJFrame.setUserInfo(tk.getTenDangNhap(), roleName);
                 mainJFrame.setVisible(true);
                 dispose();
             } else {

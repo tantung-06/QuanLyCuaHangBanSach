@@ -19,22 +19,26 @@ public class PhieuXuatBUS {
     }
 
     public ArrayList<PhieuXuat> getByTrangThai(String trangThai) {
-        if (trangThai == null || trangThai.trim().isEmpty()) return new ArrayList<>();
+        if (trangThai == null || trangThai.trim().isEmpty())
+            return new ArrayList<>();
         return phieuXuatDAO.getByTrangThai(trangThai);
     }
 
     public ArrayList<PhieuXuat> getByKhachHang(String maKhachHang) {
-        if (maKhachHang == null || maKhachHang.trim().isEmpty()) return new ArrayList<>();
+        if (maKhachHang == null || maKhachHang.trim().isEmpty())
+            return new ArrayList<>();
         return phieuXuatDAO.getByKhachHang(maKhachHang);
     }
 
     public ArrayList<PhieuXuat> getByNhanVien(String maNhanVien) {
-        if (maNhanVien == null || maNhanVien.trim().isEmpty()) return new ArrayList<>();
+        if (maNhanVien == null || maNhanVien.trim().isEmpty())
+            return new ArrayList<>();
         return phieuXuatDAO.getByNhanVien(maNhanVien);
     }
 
     public PhieuXuat getById(String maPhieuXuat) {
-        if (maPhieuXuat == null || maPhieuXuat.trim().isEmpty()) return null;
+        if (maPhieuXuat == null || maPhieuXuat.trim().isEmpty())
+            return null;
         return phieuXuatDAO.getById(maPhieuXuat);
     }
 
@@ -54,10 +58,12 @@ public class PhieuXuatBUS {
         }
 
         boolean okPx = phieuXuatDAO.insert(px);
-        if (!okPx) throw new Exception("Lỗi khi lưu phiếu xuất");
+        if (!okPx)
+            throw new Exception("Lỗi khi lưu phiếu xuất");
 
         boolean okCt = chiTietDAO.insertBatch(chiTiet);
-        if (!okCt) throw new Exception("Lỗi khi lưu chi tiết phiếu xuất");
+        if (!okCt)
+            throw new Exception("Lỗi khi lưu chi tiết phiếu xuất");
 
         // Trừ tồn kho
         for (ChiTietPhieuXuat ct : chiTiet) {
@@ -68,49 +74,79 @@ public class PhieuXuatBUS {
     }
 
     public boolean update(PhieuXuat px) throws Exception {
-        if (px == null || px.getMaPhieuXuat() == null) throw new Exception("Phiếu xuất không hợp lệ");
+        if (px == null || px.getMaPhieuXuat() == null)
+            throw new Exception("Phiếu xuất không hợp lệ");
         return phieuXuatDAO.update(px);
     }
 
     public boolean updateTrangThai(String maPhieuXuat, String trangThai) throws Exception {
-        if (maPhieuXuat == null || maPhieuXuat.trim().isEmpty()) throw new Exception("Mã phiếu xuất không hợp lệ");
-        if (trangThai == null || trangThai.trim().isEmpty()) throw new Exception("Trạng thái không hợp lệ");
+        if (maPhieuXuat == null || maPhieuXuat.trim().isEmpty())
+            throw new Exception("Mã phiếu xuất không hợp lệ");
+        if (trangThai == null || trangThai.trim().isEmpty())
+            throw new Exception("Trạng thái không hợp lệ");
+
+        PhieuXuat existing = phieuXuatDAO.getById(maPhieuXuat);
+        if (existing == null)
+            throw new Exception("Không tìm thấy phiếu xuất");
+
+        if (!"HUY".equals(existing.getTrangThai()) && "HUY".equals(trangThai)) {
+            ArrayList<ChiTietPhieuXuat> chiTiet = chiTietDAO.getByPhieuXuat(maPhieuXuat);
+            for (ChiTietPhieuXuat ct : chiTiet) {
+                sachDAO.updateSoLuongTon(ct.getMaSach(), ct.getSoLuong());
+            }
+        }
+
         return phieuXuatDAO.updateTrangThai(maPhieuXuat, trangThai);
     }
 
     public boolean delete(String maPhieuXuat) throws Exception {
-        if (maPhieuXuat == null || maPhieuXuat.trim().isEmpty()) throw new Exception("Mã phiếu xuất không hợp lệ");
-        chiTietDAO.deleteByPhieuXuat(maPhieuXuat); // xóa chi tiết trước
+        if (maPhieuXuat == null || maPhieuXuat.trim().isEmpty())
+            throw new Exception("Mã phiếu xuất không hợp lệ");
+
+        ArrayList<ChiTietPhieuXuat> chiTiet = chiTietDAO.getByPhieuXuat(maPhieuXuat);
+        for (ChiTietPhieuXuat ct : chiTiet) {
+            sachDAO.updateSoLuongTon(ct.getMaSach(), ct.getSoLuong());
+        }
+
+        chiTietDAO.deleteByPhieuXuat(maPhieuXuat);
         return phieuXuatDAO.delete(maPhieuXuat);
     }
 
     // Chi tiet phieu xuat
     public ArrayList<ChiTietPhieuXuat> getChiTiet(String maPhieuXuat) {
-        if (maPhieuXuat == null || maPhieuXuat.trim().isEmpty()) return new ArrayList<>();
+        if (maPhieuXuat == null || maPhieuXuat.trim().isEmpty())
+            return new ArrayList<>();
         return chiTietDAO.getByPhieuXuat(maPhieuXuat);
     }
 
     public boolean insertChiTiet(ChiTietPhieuXuat ct) throws Exception {
-        if (ct == null) throw new Exception("Chi tiết không hợp lệ");
-        if (ct.getSoLuong() <= 0) throw new Exception("Số lượng phải lớn hơn 0");
-        if (ct.getDonGia() <= 0) throw new Exception("Đơn giá phải lớn hơn 0");
+        if (ct == null)
+            throw new Exception("Chi tiết không hợp lệ");
+        if (ct.getSoLuong() <= 0)
+            throw new Exception("Số lượng phải lớn hơn 0");
+        if (ct.getDonGia() <= 0)
+            throw new Exception("Đơn giá phải lớn hơn 0");
         return chiTietDAO.insert(ct);
     }
 
     public boolean updateChiTiet(ChiTietPhieuXuat ct) throws Exception {
-        if (ct == null) throw new Exception("Chi tiết không hợp lệ");
-        if (ct.getSoLuong() <= 0) throw new Exception("Số lượng phải lớn hơn 0");
+        if (ct == null)
+            throw new Exception("Chi tiết không hợp lệ");
+        if (ct.getSoLuong() <= 0)
+            throw new Exception("Số lượng phải lớn hơn 0");
         return chiTietDAO.update(ct);
     }
 
     public boolean deleteChiTiet(String maPhieuXuat, String maSach) throws Exception {
-        if (maPhieuXuat == null || maSach == null) throw new Exception("Thông tin không hợp lệ");
+        if (maPhieuXuat == null || maSach == null)
+            throw new Exception("Thông tin không hợp lệ");
         return chiTietDAO.delete(maPhieuXuat, maSach);
     }
 
     // validate
     private void validatePhieuXuat(PhieuXuat px) throws Exception {
-        if (px == null) throw new Exception("Phiếu xuất không hợp lệ");
+        if (px == null)
+            throw new Exception("Phiếu xuất không hợp lệ");
         if (px.getMaPhieuXuat() == null || px.getMaPhieuXuat().trim().isEmpty())
             throw new Exception("Mã phiếu xuất không được để trống");
         if (px.getMaNhanVien() == null || px.getMaNhanVien().trim().isEmpty())
@@ -120,7 +156,7 @@ public class PhieuXuatBUS {
         if (px.getTongTien() < 0)
             throw new Exception("Tổng tiền không hợp lệ");
     }
-    
+
     public String generateMaPhieuXuat() {
         return phieuXuatDAO.generateMaPhieuXuat();
     }

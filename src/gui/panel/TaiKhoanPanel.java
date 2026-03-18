@@ -171,7 +171,7 @@ public class TaiKhoanPanel extends JPanel {
         panel.setBackground(Color.WHITE);
         panel.setBorder(BorderFactory.createLineBorder(new Color(220, 230, 240)));
 
-        String[] cols = {"Mã tài khoản", "Tên đăng nhập", "Nhóm quyền", "Trạng thái"};
+        String[] cols = {"Mã tài khoản", "Tên đăng nhập", "Mật khẩu", "Nhóm quyền", "Trạng thái"};
         tableModel = new DefaultTableModel(cols, 0) {
             public boolean isCellEditable(int r, int c) { return false; }
         };
@@ -200,7 +200,7 @@ public class TaiKhoanPanel extends JPanel {
                 setHorizontalAlignment(SwingConstants.CENTER);
                 setBorder(new EmptyBorder(0, 8, 0, 8));
                 if (!sel) setBackground(Color.WHITE);
-                if (col == 3 && v != null) {
+                if (col == 4 && v != null) {
                     setForeground("HOAT_DONG".equals(v.toString())
                             ? new Color(34, 139, 34) : new Color(200, 50, 50));
                 } else {
@@ -244,6 +244,7 @@ public class TaiKhoanPanel extends JPanel {
             tableModel.addRow(new Object[]{
                 tk.getMaTaiKhoan(),
                 tk.getTenDangNhap(),
+                tk.getMatKhau(),
                 tk.getMaNhomQuyen(),
                 tk.getTrangThai()
             });

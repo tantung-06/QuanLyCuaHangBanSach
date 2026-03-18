@@ -187,9 +187,8 @@ public class TaiKhoanDialog extends JDialog {
         txtMa.setText(tk.getMaTaiKhoan());
         txtMa.setEditable(false);
         txtTenDangNhap.setText(tk.getTenDangNhap());
-        // Không hiển thị mật khẩu thật
-        txtMatKhau.setText("");
-        txtXacNhan.setText("");
+        txtMatKhau.setText(tk.getMatKhau());
+        txtXacNhan.setText(tk.getMatKhau());
         cboTrangThai.setSelectedItem(tk.getTrangThai());
 
         if (tk.getMaNhomQuyen() != null) {

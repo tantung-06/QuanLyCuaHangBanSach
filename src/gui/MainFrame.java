@@ -22,6 +22,9 @@ public class MainFrame extends JFrame {
     private JLabel lblUserName;
     private JLabel lblUserRole;
 
+    // Thêm field để lưu vai trò
+    private String userRole;
+
     public MainFrame() {
         setTitle("Hệ thống quản lý cửa hàng bán sách");
         setSize(1920, 1080);
@@ -89,16 +92,16 @@ public class MainFrame extends JFrame {
         menuPanel.setLayout(new BoxLayout(menuPanel, BoxLayout.Y_AXIS));
 
         String[][] menus = {
-            {"🏠", "Trang chủ",  "TRANGCHU"},
-            {"📚", "Sách",        "SACH"},
-            {"📥", "Phiếu nhập",  "PHIEUNHAP"},
-            {"📤", "Phiếu xuất",  "PHIEUXUAT"},
-            {"👥", "Khách hàng",  "KHACHHANG"},
-            {"👤", "Nhân viên",   "NHANVIEN"},
-            {"💳", "Tài khoản",   "TAIKHOAN"},
-            {"🔑", "Phân quyền",  "PHANQUYEN"},
-            {"🎁", "Khuyến mãi",  "KHUYENMAI"},
-            {"📊", "Thống kê",    "THONGKE"},
+                { "🏠", "Trang chủ", "TRANGCHU" },
+                { "📚", "Sách", "SACH" },
+                { "📥", "Phiếu nhập", "PHIEUNHAP" },
+                { "📤", "Phiếu xuất", "PHIEUXUAT" },
+                { "👥", "Khách hàng", "KHACHHANG" },
+                { "👤", "Nhân viên", "NHANVIEN" },
+                { "💳", "Tài khoản", "TAIKHOAN" },
+                { "🔑", "Phân quyền", "PHANQUYEN" },
+                { "🎁", "Khuyến mãi", "KHUYENMAI" },
+                { "📊", "Thống kê", "THONGKE" },
         };
 
         ButtonGroup bg = new ButtonGroup();
@@ -137,8 +140,8 @@ public class MainFrame extends JFrame {
         });
         bottomPanel.add(btnLogout);
 
-        sidebar.add(userPanel,   BorderLayout.NORTH);
-        sidebar.add(menuPanel,   BorderLayout.CENTER);
+        sidebar.add(userPanel, BorderLayout.NORTH);
+        sidebar.add(menuPanel, BorderLayout.CENTER);
         sidebar.add(bottomPanel, BorderLayout.SOUTH);
         return sidebar;
     }
@@ -152,7 +155,7 @@ public class MainFrame extends JFrame {
         btn.setBorderPainted(false);
         btn.setFocusPainted(false);
         btn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        
+
         btn.setContentAreaFilled(false);
         btn.setOpaque(true);
 
@@ -169,6 +172,17 @@ public class MainFrame extends JFrame {
         btn.add(lblText);
 
         btn.addActionListener(e -> {
+            // Kiểm tra quyền trước khi chuyển panel
+            if ("PHIEUNHAP".equals(card) && "Nhân viên bán hàng".equals(userRole)) {
+                JOptionPane.showMessageDialog(this, "Bạn không có quyền truy cập phiếu nhập!", "Không có quyền",
+                        JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+            if ("PHIEUXUAT".equals(card) && "Nhân viên kho".equals(userRole)) {
+                JOptionPane.showMessageDialog(this, "Bạn không có quyền truy cập phiếu xuất!", "Không có quyền",
+                        JOptionPane.WARNING_MESSAGE);
+                return;
+            }
             cardLayout.show(contentPanel, card);
         });
 
@@ -185,10 +199,12 @@ public class MainFrame extends JFrame {
         return btn;
     }
 
-    public void setUserInfo(String name) {
+    public void setUserInfo(String name, String role) {
         lblUserName.setText(name);
+        lblUserRole.setText(role == null || role.trim().isEmpty() ? "" : role);
+        this.userRole = role;
     }
-    
+
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> new MainFrame().setVisible(true));
     }

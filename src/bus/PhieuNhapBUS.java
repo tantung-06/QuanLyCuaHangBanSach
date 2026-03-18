@@ -63,6 +63,18 @@ public class PhieuNhapBUS {
             throw new Exception("Mã phiếu nhập không hợp lệ");
         if (trangThai == null || trangThai.trim().isEmpty())
             throw new Exception("Trạng thái không hợp lệ");
+
+        // Nếu hủy phiếu nhập thì trừ tồn kho theo chi tiết phiếu
+        PhieuNhap existing = phieuNhapDAO.getById(maPhieuNhap);
+        if (existing == null) throw new Exception("Không tìm thấy phiếu nhập");
+
+        if (!"HUY".equals(existing.getTrangThai()) && "HUY".equals(trangThai)) {
+            ArrayList<ChiTietPhieuNhap> chiTiet = chiTietDAO.getByPhieuNhap(maPhieuNhap);
+            for (ChiTietPhieuNhap ct : chiTiet) {
+                sachDAO.updateSoLuongTon(ct.getMaSach(), -ct.getSoLuong());
+            }
+        }
+
         return phieuNhapDAO.updateTrangThai(maPhieuNhap, trangThai);
     }
 
@@ -77,7 +89,7 @@ public class PhieuNhapBUS {
             sachDAO.updateSoLuongTon(ct.getMaSach(), -ct.getSoLuong());
         }
 
-        chiTietDAO.deleteByPhieuNhap(maPhieuNhap); // xóa chi tiết trước
+        chiTietDAO.deleteByPhieuNhap(maPhieuNhap);
         return phieuNhapDAO.delete(maPhieuNhap);
     }
 

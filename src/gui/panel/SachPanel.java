@@ -89,7 +89,7 @@ public class SachPanel extends JPanel {
         JPanel searchRow = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 0));
         searchRow.setBackground(Color.WHITE);
 
-        cboFilter = new JComboBox<>(new String[]{"Tất cả", "CON_HANG", "HET_HANG"});
+        cboFilter = new JComboBox<>(new String[] { "Tất cả", "CON_HANG", "HET_HANG" });
         cboFilter.setPreferredSize(new Dimension(130, 34));
         cboFilter.addActionListener(e -> loadData());
 
@@ -172,8 +172,8 @@ public class SachPanel extends JPanel {
         panel.setBackground(Color.WHITE);
         panel.setBorder(BorderFactory.createLineBorder(new Color(220, 230, 240)));
 
-        String[] cols = {"Mã sách", "Tên sách", "Tác giả", "Nhà xuất bản",
-            "Thể loại", "Năm XB", "Số lượng", "Giá bán", "Trạng thái"};
+        String[] cols = { "Mã sách", "Tên sách", "Tác giả", "Nhà xuất bản",
+                "Thể loại", "Năm XB", "Số lượng", "Giá bán", "Trạng thái" };
         tableModel = new DefaultTableModel(cols, 0) {
             public boolean isCellEditable(int r, int c) {
                 return false;
@@ -208,7 +208,8 @@ public class SachPanel extends JPanel {
                 }
                 if (col == 8 && v != null) {
                     setForeground("CON_HANG".equals(v.toString())
-                            ? new Color(34, 139, 34) : new Color(200, 50, 50));
+                            ? new Color(34, 139, 34)
+                            : new Color(200, 50, 50));
                 } else {
                     setForeground(Color.BLACK);
                 }
@@ -249,17 +250,19 @@ public class SachPanel extends JPanel {
         tableModel.setRowCount(0);
         for (Sach s : ds) {
             String tenTG = tgBUS.getById(s.getMaTacGia()) != null
-                    ? tgBUS.getById(s.getMaTacGia()).getTenTacGia() : s.getMaTacGia();
+                    ? tgBUS.getById(s.getMaTacGia()).getTenTacGia()
+                    : s.getMaTacGia();
             String tenNXB = nxbBUS.getById(s.getMaNXB()) != null
-                    ? nxbBUS.getById(s.getMaNXB()).getTenNXB() : s.getMaNXB();
+                    ? nxbBUS.getById(s.getMaNXB()).getTenNXB()
+                    : s.getMaNXB();
             String tenTL = tlBUS.getAll().stream()
                     .filter(t -> t.getMaTheLoai().equals(s.getMaTheLoai()))
                     .map(t -> t.getTenTheLoai()).findFirst().orElse(s.getMaTheLoai());
-            tableModel.addRow(new Object[]{
-                s.getMaSach(), s.getTenSach(), tenTG, tenNXB, tenTL,
-                s.getNamXuatBan(), s.getSoLuongTon(),
-                String.format("%,.0f ₫", s.getGiaBan()),
-                s.getTrangThai()
+            tableModel.addRow(new Object[] {
+                    s.getMaSach(), s.getTenSach(), tenTG, tenNXB, tenTL,
+                    s.getNamXuatBan(), s.getSoLuongTon(),
+                    String.format("%,.0f ₫", s.getGiaBan()),
+                    s.getTrangThai()
             });
         }
     }
