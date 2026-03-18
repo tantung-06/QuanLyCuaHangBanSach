@@ -2,6 +2,7 @@ package gui;
 
 import gui.panel.KhachHangPanel;
 import gui.panel.KhuyenMaiPanel;
+import gui.panel.NhaCungCapPanel;
 import gui.panel.NhanVienPanel;
 import gui.panel.NhomQuyenPanel;
 import gui.panel.PhieuNhapPanel;
@@ -43,6 +44,7 @@ public class MainFrame extends JFrame {
         contentPanel.add(new SachPanel(), "SACH");
         contentPanel.add(new PhieuNhapPanel(), "PHIEUNHAP");
         contentPanel.add(new PhieuXuatPanel(), "PHIEUXUAT");
+        contentPanel.add(new NhaCungCapPanel(), "NHACUNGCAP");
         contentPanel.add(new KhachHangPanel(), "KHACHHANG");
         contentPanel.add(new NhanVienPanel(), "NHANVIEN");
         contentPanel.add(new TaiKhoanPanel(), "TAIKHOAN");
@@ -96,6 +98,7 @@ public class MainFrame extends JFrame {
                 { "📚", "Sách", "SACH" },
                 { "📥", "Phiếu nhập", "PHIEUNHAP" },
                 { "📤", "Phiếu xuất", "PHIEUXUAT" },
+                { "📦", "Nhà cung cấp", "NHACUNGCAP" },
                 { "👥", "Khách hàng", "KHACHHANG" },
                 { "👤", "Nhân viên", "NHANVIEN" },
                 { "💳", "Tài khoản", "TAIKHOAN" },

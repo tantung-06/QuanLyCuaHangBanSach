@@ -14,13 +14,13 @@ import java.util.ArrayList;
  * @author DELL
  */
 public class NhaCungCapDAO {
-    public ArrayList<NhaCungCap> getAll(){
+    public ArrayList<NhaCungCap> getAll() {
         ArrayList<NhaCungCap> ds = new ArrayList<>();
         String sql = "SELECT * FROM NhaCungCap ORDER BY maNCC ASC";
         try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql);
-             ResultSet rs = ps.executeQuery()) {
-            while (rs.next()){
+                PreparedStatement ps = conn.prepareStatement(sql);
+                ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
                 NhaCungCap ncc = new NhaCungCap(
                         rs.getString("maNCC"),
                         rs.getString("tenNCC"),
@@ -30,7 +30,7 @@ public class NhaCungCapDAO {
                         rs.getString("trangThai"));
                 ds.add(ncc);
             }
-        }catch(SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
         }
         return ds;
@@ -40,9 +40,9 @@ public class NhaCungCapDAO {
         ArrayList<NhaCungCap> ds = new ArrayList<>();
         String sql = "SELECT * FROM NhaCungCap WHERE trangThai='HOAT_DONG'";
         try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql);
-             ResultSet rs = ps.executeQuery()) {
-            while (rs.next()){
+                PreparedStatement ps = conn.prepareStatement(sql);
+                ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
                 NhaCungCap ncc = new NhaCungCap(
                         rs.getString("maNCC"),
                         rs.getString("tenNCC"),
@@ -52,7 +52,30 @@ public class NhaCungCapDAO {
                         rs.getString("trangThai"));
                 ds.add(ncc);
             }
-        }catch(SQLException e){
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return ds;
+    }
+
+    public ArrayList<NhaCungCap> getByTrangThai(String trangThai) {
+        ArrayList<NhaCungCap> ds = new ArrayList<>();
+        String sql = "SELECT * FROM NhaCungCap WHERE trangThai=?";
+        try (Connection conn = DatabaseConnection.getConnection();
+                PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, trangThai);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                NhaCungCap ncc = new NhaCungCap(
+                        rs.getString("maNCC"),
+                        rs.getString("tenNCC"),
+                        rs.getString("soDienThoai"),
+                        rs.getString("diaChi"),
+                        rs.getString("email"),
+                        rs.getString("trangThai"));
+                ds.add(ncc);
+            }
+        } catch (SQLException e) {
             e.printStackTrace();
         }
         return ds;
@@ -61,7 +84,7 @@ public class NhaCungCapDAO {
     public NhaCungCap getById(String maNCC) {
         String sql = "SELECT * FROM NhaCungCap WHERE maNCC=?";
         try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+                PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, maNCC);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
@@ -82,7 +105,7 @@ public class NhaCungCapDAO {
     public boolean insert(NhaCungCap ncc) {
         String sql = "INSERT INTO NhaCungCap(maNCC,tenNCC,soDienThoai,diaChi,email,trangThai) VALUES(?,?,?,?,?,?)";
         try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+                PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, ncc.getMaNCC());
             ps.setString(2, ncc.getTenNCC());
             ps.setString(3, ncc.getSoDienThoai());
@@ -90,16 +113,16 @@ public class NhaCungCapDAO {
             ps.setString(5, ncc.getEmail());
             ps.setString(6, ncc.getTrangThai());
             return ps.executeUpdate() > 0;
-        }catch(SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
         }
         return false;
     }
 
-    public boolean update(NhaCungCap ncc){
+    public boolean update(NhaCungCap ncc) {
         String sql = "UPDATE NhaCungCap SET tenNCC=?,soDienThoai=?,diaChi=?,email=?,trangThai=? WHERE maNCC=?";
         try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+                PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, ncc.getTenNCC());
             ps.setString(2, ncc.getSoDienThoai());
             ps.setString(3, ncc.getDiaChi());
@@ -107,34 +130,49 @@ public class NhaCungCapDAO {
             ps.setString(5, ncc.getTrangThai());
             ps.setString(6, ncc.getMaNCC());
             return ps.executeUpdate() > 0;
-        }catch(SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
         }
         return false;
     }
 
-    public boolean updateTrangThai(String maNCC, String trangThai){
+    public boolean updateTrangThai(String maNCC, String trangThai) {
         String sql = "UPDATE NhaCungCap SET trangThai=? WHERE maNCC=?";
         try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+                PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, trangThai);
             ps.setString(2, maNCC);
             return ps.executeUpdate() > 0;
-        }catch(SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
         return false;
     }
 
-    public boolean delete(String maNCC){
+    public boolean delete(String maNCC) {
         String sql = "DELETE FROM NhaCungCap WHERE maNCC=?";
         try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+                PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, maNCC);
             return ps.executeUpdate() > 0;
-        }catch(SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
         return false;
+    }
+
+    public String generateMaNCC() {
+        String sql = "SELECT maNCC FROM NhaCungCap ORDER BY maNCC DESC LIMIT 1";
+        try (Connection conn = DatabaseConnection.getConnection();
+                PreparedStatement ps = conn.prepareStatement(sql);
+                ResultSet rs = ps.executeQuery()) {
+            if (rs.next()) {
+                int num = Integer.parseInt(rs.getString("maNCC").replaceAll("[^0-9]", ""));
+                return String.format("NCC%03d", num + 1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return "NCC001";
     }
 }
